@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"未找到任何关于 ${query} 的结果","hits_stats":"${time}ms 内共找到 ${hits} 条结果"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="环境微信认证服务号，已开通微信支付 支付域名：wxpay.cyrilxu.cn 语言：nodejs 支付流程">
+<meta name="keywords" content="nodejs,微信,微信支付">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信服务号支付">
+<meta property="og:url" content="http://www.cyrilxu.cn/posts/7644/index.html">
+<meta property="og:site_name" content="Cyril&#39;s Blog">
+<meta property="og:description" content="环境微信认证服务号，已开通微信支付 支付域名：wxpay.cyrilxu.cn 语言：nodejs 支付流程">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.cyrilxu.cn/posts/7644/chapter7_4_1.png">
+<meta property="og:updated_time" content="2019-12-18T15:28:18.265Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信服务号支付">
+<meta name="twitter:description" content="环境微信认证服务号，已开通微信支付 支付域名：wxpay.cyrilxu.cn 语言：nodejs 支付流程">
+<meta name="twitter:image" content="http://www.cyrilxu.cn/posts/7644/chapter7_4_1.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Cyril's Blog" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://www.cyrilxu.cn/posts/7644/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>微信服务号支付 | Cyril's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyril's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">关于明天的事，我们后天就知道了</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.cyrilxu.cn/posts/7644/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Cyril Xu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyril's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微信服务号支付
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-10 23:07:52" itemprop="dateCreated datePublished" datetime="2019-06-10T23:07:52+08:00">2019-06-10</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/微信/" itemprop="url" rel="index"><span itemprop="name">微信</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/微信/nodejs/" itemprop="url" rel="index"><span itemprop="name">nodejs</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>微信认证服务号，已开通微信支付</p>
+<p>支付域名：wxpay.cyrilxu.cn</p>
+<p>语言：nodejs</p>
+<h1 id="支付流程"><a href="#支付流程" class="headerlink" title="支付流程"></a>支付流程</h1><a id="more"></a>
+
+<p><img src="/posts/7644/chapter7_4_1.png" alt></p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><ul>
+<li>网页授权，为了获取openid。详见上一篇</li>
+<li>配置商户，在公众号的微信支付页面，关联微信商户号</li>
+<li>在微信支付商户设置，产品中心 —&gt; 开发配置 —&gt;支付配置—&gt;JSAPI授权目录。<strong>现在支持根目录了</strong></li>
+<li>在微信商户设置中，账户中心—&gt;API安全—&gt;API密钥，设置API密钥，记住。<strong>牢记，以后只能修改不能查看。存放在服务器端</strong></li>
+</ul>
+<h1 id="具体流程"><a href="#具体流程" class="headerlink" title="具体流程"></a>具体流程</h1><ol>
+<li>获取openid，详见上一篇</li>
+<li>生成订单</li>
+<li>调用统一下单API获取预付单信息（prepay_id）</li>
+<li>生成jsapi付款参数并签名</li>
+<li>付款页付款，成功则跳转成功页</li>
+<li>后台接收付款信息</li>
+<li>前台请求付款信息</li>
+</ol>
+<h1 id="Talk-is-cheap-show-you-the-code"><a href="#Talk-is-cheap-show-you-the-code" class="headerlink" title="Talk is cheap, show you the code"></a>Talk is cheap, show you the code</h1><ol>
+<li><p>获取openid，<a href="/posts/48327">微信获取用户信息</a></p>
+</li>
+<li><p>生成订单信息：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	openid：openid,</span><br><span class="line">	order_num: 自己系统的订单号,</span><br><span class="line">	pay_money: 付款金额，单位为分,</span><br><span class="line">	attach: 产品名称</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p>获取prepay_id:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取微信统一下单的接口数据</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">getPrepayId: <span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params">obj, config</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// var that = this;</span></span><br><span class="line">    <span class="comment">// 生成统一下单接口参数</span></span><br><span class="line">    <span class="keyword">var</span> UnifiedorderParams = &#123;</span><br><span class="line">        appid : config.wxappid,</span><br><span class="line">        attach : obj.attach,</span><br><span class="line">        body : obj.body,</span><br><span class="line">        mch_id : config.mch_id,</span><br><span class="line">        nonce_str: obj.nonce_str,</span><br><span class="line">        notify_url : obj.notify_url,<span class="comment">// 微信付款后的回调地址</span></span><br><span class="line">        openid : obj.openid,</span><br><span class="line">        out_trade_no : obj.order_num, <span class="comment">//订单号</span></span><br><span class="line">        <span class="comment">// spbill_create_ip : obj.spbill_create_ip,</span></span><br><span class="line">        total_fee : obj.total_fee,</span><br><span class="line">        trade_type : <span class="string">'JSAPI'</span>,</span><br><span class="line">        <span class="comment">// sign : getSign(),</span></span><br><span class="line">    &#125;;</span><br><span class="line">    UnifiedorderParams.sign = <span class="keyword">this</span>.getSign(UnifiedorderParams); <span class="comment">//签名算法，见附录</span></span><br><span class="line">    <span class="keyword">var</span> postBody = <span class="keyword">this</span>.getUnifiedorderXmlParams(UnifiedorderParams); <span class="comment">//生成xml</span></span><br><span class="line">    <span class="keyword">var</span> url = <span class="string">'https://api.mch.weixin.qq.com/pay/unifiedorder'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> opt = &#123;</span><br><span class="line">        url: url,</span><br><span class="line">        body: postBody,</span><br><span class="line">        method: <span class="string">'POST'</span>,</span><br><span class="line">        <span class="comment">// json: true,</span></span><br><span class="line">        resolveWithFullResponse: <span class="literal">true</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> &#123;statusCode, body&#125; = <span class="keyword">await</span> request(opt);</span><br><span class="line">    <span class="keyword">if</span> (statusCode === <span class="number">200</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> prepay_id = <span class="keyword">this</span>.getXMLNodeValue(<span class="string">'prepay_id'</span>, body.toString(<span class="string">"utf-8"</span>));</span><br><span class="line">        <span class="keyword">var</span> tmp = prepay_id.split(<span class="string">'['</span>);</span><br><span class="line">        <span class="keyword">var</span> tmp1 = tmp[<span class="number">2</span>].split(<span class="string">']'</span>);</span><br><span class="line">        prepay_id = tmp1[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">return</span> prepay_id;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="4">
+<li><p>生成jsapi参数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 微信支付的所有参数</span></span><br><span class="line"><span class="comment"> * @param req 请求的资源, 获取必要的数据</span></span><br><span class="line"><span class="comment"> * @returns &#123;appId: string, timeStamp: Number, nonceStr: *, package: string, signType: string, paySign: *&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">getBrandWCPayParams: <span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params">obj, config</span>)</span>&#123;</span><br><span class="line">    obj.nonce_str = <span class="keyword">this</span>.createNonceStr(); <span class="comment">//随机字符串</span></span><br><span class="line">    <span class="comment">//统一下单id</span></span><br><span class="line">    <span class="keyword">const</span> prepay_id = <span class="keyword">await</span> <span class="keyword">this</span>.getPrepayId(obj);</span><br><span class="line">    <span class="keyword">var</span> wcPayParams = &#123;</span><br><span class="line">        <span class="string">"appId"</span> : config.wxappid,     <span class="comment">//公众号名称，由商户传入</span></span><br><span class="line">        <span class="string">"timeStamp"</span> : <span class="built_in">parseInt</span>(<span class="keyword">new</span> <span class="built_in">Date</span>().getTime() / <span class="number">1000</span>).toString(),         <span class="comment">//时间戳，自1970年以来的秒数</span></span><br><span class="line">        <span class="string">"nonceStr"</span> : obj.nonce_str, <span class="comment">//随机串</span></span><br><span class="line">        <span class="comment">// 通过统一下单接口获取</span></span><br><span class="line">        <span class="string">"package"</span> : <span class="string">"prepay_id="</span>+prepay_id,</span><br><span class="line">        <span class="string">"signType"</span> : <span class="string">"MD5"</span>        <span class="comment">//微信签名方式：</span></span><br><span class="line">    &#125;;</span><br><span class="line">    wcPayParams.paySign = <span class="keyword">this</span>.getSign(wcPayParams); <span class="comment">//微信支付签名</span></span><br><span class="line">    <span class="keyword">return</span> wcPayParams;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="5">
+<li><p>付款页js：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> wxJsApiParam;<span class="comment">//微信下单参数</span></span><br><span class="line"><span class="keyword">var</span> errMsg = <span class="string">''</span>;<span class="comment">//微信返回支付错误信息</span></span><br><span class="line"><span class="keyword">var</span> wexin_state = <span class="number">1</span>;<span class="comment">//微信按钮初始状态为1，点击可下单付款，2时点击不能下单仅付款,3时不能点击</span></span><br><span class="line"></span><br><span class="line">$(<span class="string">'#paylink'</span>).on(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'wexin_state'</span>, wexin_state);</span><br><span class="line">    <span class="keyword">if</span> (wexin_state == <span class="number">1</span>)&#123;</span><br><span class="line">        wexin_state = <span class="number">3</span>;</span><br><span class="line">        goWepay();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (wexin_state == <span class="number">2</span>) &#123;</span><br><span class="line">        callpay();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//下单</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">goWepay</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: <span class="string">'dopay'</span>,<span class="comment">//获取微信支付jsapi参数：wcPayParams</span></span><br><span class="line">        type: <span class="string">'POST'</span>,</span><br><span class="line">        dataType: <span class="string">'json'</span>,</span><br><span class="line">        data:&#123;</span><br><span class="line">            openid:openid,</span><br><span class="line">            order_num: order_num,</span><br><span class="line">            attach:attach,</span><br><span class="line">            pay_money:pay_money</span><br><span class="line">            &#125;,</span><br><span class="line">        success:<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'data:'</span>, data);</span><br><span class="line">            wexin_state = data.state;</span><br><span class="line">            wxJsApiParam = data.param;</span><br><span class="line">            callpay();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//调用微信JS api 支付</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">callpay</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'WeixinJSBridge:'</span>, WeixinJSBridge);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> WeixinJSBridge == <span class="string">"undefined"</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">document</span>.addEventListener) &#123;</span><br><span class="line">            <span class="built_in">document</span>.addEventListener(<span class="string">'WeixinJSBridgeReady'</span>, jsApiCall,<span class="literal">false</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">document</span>.attachEvent) &#123;</span><br><span class="line">            <span class="built_in">document</span>.attachEvent(<span class="string">'WeixinJSBridgeReady'</span>, jsApiCall);</span><br><span class="line">            <span class="built_in">document</span>.attachEvent(<span class="string">'onWeixinJSBridgeReady'</span>, jsApiCall);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        onBridgeReady();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onBridgeReady</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'wxJsApiParam:'</span>,wxJsApiParam);</span><br><span class="line">    <span class="keyword">if</span> (wxJsApiParam != <span class="literal">null</span>) &#123;<span class="comment">//如果订单生成成功 %&gt;</span></span><br><span class="line">        WeixinJSBridge.invoke(</span><br><span class="line">            <span class="string">'getBrandWCPayRequest'</span>,</span><br><span class="line">            wxJsApiParam,<span class="comment">//json串</span></span><br><span class="line">            <span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(res.err_msg == <span class="string">"get_brand_wcpay_request:ok"</span> ) &#123;</span><br><span class="line">                    <span class="built_in">console</span>.log(<span class="string">"ok"</span>);</span><br><span class="line">                    <span class="built_in">window</span>.location.href = <span class="string">"success?order="</span> + order_num;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 使用以上方式判断前端返回,微信团队郑重提示:res.err_msg将在用户支付成功后返回</span></span><br><span class="line">                <span class="comment">// ok，但并不保证它绝对可靠。</span></span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="built_in">console</span>.log(<span class="string">"fail"</span>);</span><br><span class="line">                    <span class="built_in">console</span>.log(res);</span><br><span class="line"><span class="comment">//                            window.location.href = "/weixinpay/failed"</span></span><br><span class="line"><span class="comment">//                            alert("支付失败")</span></span><br><span class="line">                &#125;</span><br><span class="line">                WeixinJSBridge.log(res.err_msg);</span><br><span class="line">            &#125;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="6">
+<li><p>接收付款信息：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">router.post(<span class="string">'/notify'</span>, <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// console.log('notify post:', body);</span></span><br><span class="line">    req.on(<span class="string">"data"</span>,<span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">        xmlParser.parseString(data.toString(), <span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params">err, result</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> body = result.xml;</span><br><span class="line">            <span class="keyword">var</span> keys = <span class="built_in">Object</span>.keys(body);</span><br><span class="line">            <span class="keyword">var</span> parseBody = &#123;&#125;;</span><br><span class="line">            keys.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">key</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (key!=<span class="string">'sign'</span>) &#123;</span><br><span class="line">                    parseBody[key] = body[key][<span class="number">0</span>];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="comment">// console.log(parseBody);</span></span><br><span class="line">            <span class="keyword">if</span> (parseBody.result_code == <span class="string">'SUCCESS'</span> &amp;&amp; wx.getSign(parseBody) == body.sign[<span class="number">0</span>])&#123;</span><br><span class="line">                <span class="comment">//业务代码</span></span><br><span class="line">                <span class="comment">//发送成功接收</span></span><br><span class="line">                <span class="keyword">var</span> xml = &#123;<span class="attr">xml</span>:&#123;</span><br><span class="line">                    return_code:<span class="string">'SUCCESS'</span>,</span><br><span class="line">                    return_msg:<span class="string">'OK'</span></span><br><span class="line">                &#125;&#125;;</span><br><span class="line">                res.send(xmlBuilder.buildObject(xml))</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="7">
+<li><p>ajax查询付款信息：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkCode</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: <span class="string">'checkOrder?order=&lt;%=order_num%&gt;'</span>,</span><br><span class="line">        method: <span class="string">'GET'</span>,</span><br><span class="line">        success: <span class="function">(<span class="params">data</span>)=&gt;</span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (data.state == <span class="number">200</span>) &#123;</span><br><span class="line">                $(<span class="string">'#check'</span>).html(data.data);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                setTimeout(checkCode, <span class="number">3000</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        error: <span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">            setTimeout(checkCode, <span class="number">3000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">$(()=&gt;&#123;checkCode()&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取随机的NonceStr</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">createNonceStr: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.random().toString(<span class="number">36</span>).substr(<span class="number">2</span>, <span class="number">15</span>);</span><br><span class="line">&#125;,</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取微信支付的签名</span></span><br><span class="line"><span class="comment"> * @param payParams</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">getSign: <span class="function"><span class="keyword">function</span>(<span class="params">args, config = aijia</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> keys = <span class="built_in">Object</span>.keys(args);</span><br><span class="line">    keys = keys.sort();</span><br><span class="line">    <span class="keyword">var</span> newArgs = &#123;&#125;;</span><br><span class="line">    keys.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">key</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (args[key] &amp;&amp; args[key]!==<span class="string">''</span>)</span><br><span class="line">            newArgs[key] = args[key];</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> string = <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> newArgs) &#123;</span><br><span class="line">        string += <span class="string">'&amp;'</span> + k + <span class="string">'='</span> + newArgs[k];</span><br><span class="line">    &#125;</span><br><span class="line">    string = string.substr(<span class="number">1</span>) + <span class="string">'&amp;key='</span>+config.wxpaykey;</span><br><span class="line">    <span class="keyword">return</span> crypto.createHash(<span class="string">'md5'</span>).update(string,<span class="string">'utf8'</span>).digest(<span class="string">'hex'</span>).toUpperCase();</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生成微信统一下单参数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">getUnifiedorderXmlParams : <span class="function"><span class="keyword">function</span>(<span class="params">obj, config = aijia</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> body = <span class="string">'&lt;xml&gt; '</span> +</span><br><span class="line">        <span class="string">'&lt;appid&gt;'</span>+config.wxappid+<span class="string">'&lt;/appid&gt; '</span> +</span><br><span class="line">        <span class="string">'&lt;attach&gt;'</span>+obj.attach+<span class="string">'&lt;/attach&gt; '</span> +</span><br><span class="line">        <span class="string">'&lt;body&gt;'</span>+obj.body+<span class="string">'&lt;/body&gt; '</span> +</span><br><span class="line">        <span class="string">'&lt;mch_id&gt;'</span>+config.mch_id+<span class="string">'&lt;/mch_id&gt; '</span> +</span><br><span class="line">        <span class="string">'&lt;nonce_str&gt;'</span>+obj.nonce_str+<span class="string">'&lt;/nonce_str&gt; '</span> +</span><br><span class="line">        <span class="string">'&lt;notify_url&gt;'</span>+obj.notify_url+<span class="string">'&lt;/notify_url&gt;'</span> +</span><br><span class="line">        <span class="string">'&lt;openid&gt;'</span>+obj.openid+<span class="string">'&lt;/openid&gt; '</span> +</span><br><span class="line">        <span class="string">'&lt;out_trade_no&gt;'</span>+obj.out_trade_no+<span class="string">'&lt;/out_trade_no&gt;'</span>+</span><br><span class="line">        <span class="string">'&lt;spbill_create_ip&gt;&lt;/spbill_create_ip&gt; '</span> +</span><br><span class="line">        <span class="string">'&lt;total_fee&gt;'</span>+obj.total_fee+<span class="string">'&lt;/total_fee&gt; '</span> +</span><br><span class="line">        <span class="string">'&lt;trade_type&gt;JSAPI&lt;/trade_type&gt; '</span> +</span><br><span class="line">        <span class="string">'&lt;sign&gt;'</span>+obj.sign+<span class="string">'&lt;/sign&gt; '</span> +</span><br><span class="line">        <span class="string">'&lt;/xml&gt;'</span>;</span><br><span class="line">    <span class="keyword">return</span> body;</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取xml中node值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">getXMLNodeValue: <span class="function"><span class="keyword">function</span>(<span class="params">node_name, xml</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> tmp = xml.split(<span class="string">"&lt;"</span> + node_name + <span class="string">"&gt;"</span>);</span><br><span class="line">    <span class="keyword">var</span> _tmp = tmp[<span class="number">1</span>].split(<span class="string">"&lt;/"</span> + node_name + <span class="string">"&gt;"</span>);</span><br><span class="line">    <span class="keyword">return</span> _tmp[<span class="number">0</span>];</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/微信/" rel="tag"># 微信</a>
+          
+            <a href="/tags/微信支付/" rel="tag"># 微信支付</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/48327/" rel="next" title="微信获取用户信息">
+                <i class="fa fa-chevron-left"></i> 微信获取用户信息
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/799a7dce/" rel="prev" title="nodejs操作mysql数据库">
+                nodejs操作mysql数据库 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Cyril Xu">
+            
+              <p class="site-author-name" itemprop="name">Cyril Xu</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#支付流程"><span class="nav-number">2.</span> <span class="nav-text">支付流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#具体流程"><span class="nav-number">4.</span> <span class="nav-text">具体流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Talk-is-cheap-show-you-the-code"><span class="nav-number">5.</span> <span class="nav-text">Talk is cheap, show you the code</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录"><span class="nav-number">6.</span> <span class="nav-text">附录</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">  <a href="http://www.beian.miit.gov.cn" rel="noopener" target="_blank">冀ICP备15007634 </a>&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyril Xu</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

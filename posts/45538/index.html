@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"未找到任何关于 ${query} 的结果","hits_stats":"${time}ms 内共找到 ${hits} 条结果"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="互联网有一座围墙，墙内的人想出去，墙外的人……真会玩">
+<meta name="keywords" content="VPN,Linode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linode搭建VPN">
+<meta property="og:url" content="http://www.cyrilxu.cn/posts/45538/index.html">
+<meta property="og:site_name" content="Cyril&#39;s Blog">
+<meta property="og:description" content="互联网有一座围墙，墙内的人想出去，墙外的人……真会玩">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.cyrilxu.cn/posts/45538/complete.png">
+<meta property="og:updated_time" content="2019-12-18T15:28:18.256Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linode搭建VPN">
+<meta name="twitter:description" content="互联网有一座围墙，墙内的人想出去，墙外的人……真会玩">
+<meta name="twitter:image" content="http://www.cyrilxu.cn/posts/45538/complete.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Cyril's Blog" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://www.cyrilxu.cn/posts/45538/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>linode搭建VPN | Cyril's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyril's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">关于明天的事，我们后天就知道了</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.cyrilxu.cn/posts/45538/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Cyril Xu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyril's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linode搭建VPN
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-21 11:37:55" itemprop="dateCreated datePublished" datetime="2019-04-21T11:37:55+08:00">2019-04-21</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/贪玩/" itemprop="url" rel="index"><span itemprop="name">贪玩</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>互联网有一座围墙，墙内的人想出去，墙外的人……真会玩</p>
+<a id="more"></a>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在中国当个码农真难。想搜个问题，百度就别指望了，google的话，你还需要一个梯子。</p>
+<h1 id="IPSec-ikev2"><a href="#IPSec-ikev2" class="headerlink" title="IPSec/ikev2"></a>IPSec/ikev2</h1><p>使用的是一键安装脚本</p>
+<p>最新更新内容请见Github上的项目说明:<a href="https://github.com/quericy/one-key-ikev2-vpn" target="_blank" rel="noopener">https://github.com/quericy/one-key-ikev2-vpn</a></p>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ul>
+<li>服务端要求：Ubuntu或者CentOS-6/7或者Debian</li>
+<li>客户端：<ul>
+<li>iOS/OSX=&gt;ikev1,ikev2</li>
+<li>Andriod=&gt;ikev1</li>
+<li>WindowsPhone=&gt;ikev2</li>
+<li>其他Windows平台=&gt;ikev2</li>
+</ul>
+</li>
+<li>可使用自己的私钥和根证书，也可自动生成</li>
+<li>证书可绑定域名或ip</li>
+<li>要是图方便可一路回车</li>
+<li>生成单独的sysctl配置文件/etc/sysctl.d/10-ipsec.conf单独加载，用于开启ipv4转发(如以后卸载或需要关闭net.ipv4.ip_forward,请记得删除此文件);</li>
+</ul>
+<h2 id="服务端安装说明"><a href="#服务端安装说明" class="headerlink" title="服务端安装说明"></a><strong>服务端安装说明</strong></h2><ol>
+<li>下载脚本:</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https://raw.githubusercontent.com/quericy/one-key-ikev2-vpn/master/one-key-ikev2.sh</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注:如需使用其他分支的脚本,请将上述url中的master修改为分支名称,各分支区别详见本页的分支说明节点</li>
+</ul>
+<ol start="2">
+<li>运行脚本：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x one-key-ikev2.sh</span><br><span class="line">bash one-key-ikev2.sh</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>等待自动配置部分内容后，选择vps类型（OpenVZ还是Xen、KVM），<strong>选错将无法成功连接，请务必核实服务器的类型</strong>。输入服务器ip或者绑定的域名(连接vpn时服务器地址将需要与此保持一致,如果是导入泛域名证书这里需要写*.域名的形式)；</p>
+</li>
+<li><p>选择使用使用证书颁发机构签发的SSL证书还是生成自签名证书：</p>
+<ul>
+<li>如果选择no,使用自签名证书（客户端如果使用IkeV2方式连接，将需要导入生成的证书并信任）则需要填写证书的相关信息(C,O,CN)，为空将使用默认值(default value)，确认无误后按任意键继续,后续安装过程中会出现输入两次pkcs12证书的密码的提示(可以设置为空)</li>
+<li>如果选择yes，使用SSL证书（如果证书是被信任的，后续步骤客户端将无需导入证书）请在继续下一步之前，将以下文件按提示命名并放在<strong>脚本相同的目录下</strong>：<ol>
+<li><strong>ca.cert.pem</strong> 证书颁发机构的CA，比如Let‘s Encrypt的证书,或者其他链证书；</li>
+<li><strong>server.cert.pem</strong> 签发的域名证书；</li>
+<li><strong>server.pem</strong> 签发域名证书时用的私钥；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>是否使用SNAT规则(可选).默认为不使用.使用前请确保服务器具有不变的<strong>静态公网ip</strong>,可提升防火墙对数据包的处理速度.如果服务器网络设置了NAT(如AWS的弹性ip机制),则填写网卡连接接口的ip地址</p>
+</li>
+<li><p>防火墙配置.默认配置iptables(如果使用的是firewall(如CentOS7)请选择yes自动配置firewall,将无视SNAT并跳过后续的补充网卡接口步骤).补充网卡接口信息,为空则使用默认值(Xen、KVM默认使用eth0,OpenVZ默认使用venet0).如果服务器使用其他公网接口需要在此指定接口名称,<strong>填写错误VPN连接后将无法访问外网</strong>)</p>
+</li>
+<li><p>看到install Complete字样即表示安装完成。默认用户名密码将以黄字显示，可根据提示自行修改配置文件中的用户名密码,多用户则在配置文件中按格式一行一个(多用户时用户名不能使用%any),保存并重启服务生效。</p>
+</li>
+<li><p>将提示信息中的证书文件ca.cert.pem拷贝到客户端，修改后缀名为.cer后导入。ios设备使用Ikev1无需导入证书，而是需要在连接时输入共享密钥，共享密钥即是提示信息中的黄字PSK</p>
+<p><img src="/posts/45538/complete.png" alt="complete"></p>
+</li>
+</ol>
+<h2 id="客户端配置说明"><a href="#客户端配置说明" class="headerlink" title="客户端配置说明"></a><strong>客户端配置说明</strong></h2><ul>
+<li><p>连接的服务器地址和证书保持一致,即取决于签发证书ca.cert.pem时使用的是ip还是域名;</p>
+</li>
+<li><p><strong>Android/iOS/OSX</strong> 可使用ikeV1,认证方式为用户名+密码+预共享密钥(PSK);</p>
+</li>
+<li><p><strong>iOS/OSX/Windows7+/WindowsPhone8.1+/Linux</strong> 均可使用IkeV2,认证方式为用户名+密码。使用SSL证书则无需导入证书；使用自签名证书则需要先导入证书才能连接,可将ca.cert.pem更改后缀名作为邮件附件发送给客户端,手机端也可通过浏览器导入,其中:</p>
+<ul>
+<li><p><strong>iOS/OSX</strong> 的远程ID和服务器地址保持一致,用户鉴定选择”用户名”.如果通过浏览器导入,将证书放在可访问的远程外链上,并在<strong>系统浏览器</strong>(Safari)中访问外链地址;</p>
+</li>
+<li><p><strong>Windows PC</strong> 系统导入证书需要导入到<strong>“本地计算机”</strong>的”受信任的根证书颁发机构”,以”当前用户”的导入方式是无效的.推荐运行mmc添加本地计算机的证书管理单元来操作;</p>
+</li>
+<li><p><strong>WindowsPhone8.1</strong> 登录时的用户名需要带上域信息,即wp”关于”页面的设备名称\用户名,也可以使用%any   %any : EAP “密码”进行任意用户名登录,但指定了就不能添加其他用户名了.</p>
+</li>
+<li><p><strong>WindowsPhone10</strong> 的vpn还存在bug(截至10586.164),ikeV2方式可连接但系统流量不会走vpn,只能等微软解决. (截至14393.5,此bug已经得到修复,现在WP10已经可以正常使用IkeV2.)</p>
+</li>
+<li><p><strong>Windows10</strong> 也存在此bug,部分Win10系统连接后ip不变,没有自动添加路由表,使用以下方法可解决:</p>
+<ul>
+<li><p>手动关闭vpn的split tunneling功能(在远程网络上使用默认网关);</p>
+</li>
+<li><p>也可使用powershell修改,进入CMD窗口,运行如下命令:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">powershell           <span class="comment">#进入ps控制台</span></span><br><span class="line">get-vpnconnection    <span class="comment">#检查vpn连接的设置（包括vpn连接的名称）</span></span><br><span class="line">set-vpnconnection <span class="string">"vpn连接名称"</span> -splittunneling <span class="literal">$false</span>    <span class="comment">#关闭split tunneling     </span></span><br><span class="line">get-vpnconnection    <span class="comment">#检查修改结果</span></span><br><span class="line"><span class="keyword">exit</span>                 <span class="comment">#退出ps控制台</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>Windows 10</strong></p>
+<p>导入证书：</p>
+<ul>
+<li>将 CA 根证书 ca.cert.pem 重命名为ca.cert.crt</li>
+<li>双击 ca.cert.crt 开始安装证书</li>
+<li>点击安装证书</li>
+<li>“存储位置” 选择 “本地计算机”, 下一步</li>
+<li>选择 “将所有的证书都放入下列存储区”, 点浏览, 选择      “受信任的根证书颁发机构”, 确定, 下一步, 完成.</li>
+</ul>
+<p>建立连接：</p>
+<ul>
+<li>“控制面板”-“网络和共享中心”-“设置新的连接或网络”-“连接到工作区”-“使用我的      Internet 连接”</li>
+<li>Internet 地址写服务器 IP 或 URL。</li>
+<li>描述随便写。</li>
+<li>用户名密码写之前配置的 EAP 的那个。</li>
+<li>确定</li>
+<li>转到 控制面板网络和 Internet网络连接</li>
+<li>在新建的 VPN 连接上右键属性然后切换到“安全”选项卡</li>
+<li>VPN 类型选 IKEv2</li>
+<li>数据加密选“需要加密”</li>
+<li>身份认证这里需要说一下，如果想要使用 EAP      认证的话就选择“Microsoft:安全密码(EAP-MSCHAP v2)”; 想要使用私人证书认证的话就选择“使用计算机证书”。</li>
+<li>再切换到 “网络” 选项卡, 双击 “Internet      协议版本 4” 以打开属性窗口, 这里说一下, 如果你使用的是老版本的 win10, 可能会打不开属性窗口, 这是已知的 bug,      升级最新版本即可解决.</li>
+<li>点击 “高级” 按钮, 勾选      “在远程网络上使用默认网关”, 确定退出.</li>
+</ul>
+<p>VPN 配置完成</p>
+</li>
+<li><p><strong>Windows 7</strong></p>
+<ul>
+<li>开始菜单搜索「cmd」，打开后输入mmc（Microsoft 管理控制台）。</li>
+<li>「文件」-「添加/删除管理单元」，添加「证书」单元</li>
+<li>证书单元的弹出窗口中一定要选「计算机账户」，之后选「本地计算机」，确定。</li>
+<li>在左边的「控制台根节点」下选择「证书」-「受信任的根证书颁发机构」-「证书」，右键      -「所有任务」-「导入」打开证书导入窗口。</li>
+<li>选择 CA 证书 ca.cert.crt导入即可</li>
+</ul>
+<p><strong>注意</strong> 千万不要双击 .p12证书导入！因为那样会导入到当前用户而不是本机计算机中，ipsec 守护精灵是访问不了它的。</p>
+</li>
+</ul>
+<h2 id="卸载方式"><a href="#卸载方式" class="headerlink" title="卸载方式"></a><strong>卸载方式</strong></h2><ol>
+<li><p>进入脚本所在目录的strongswan文件夹执行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make   uninstall</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除脚本所在目录的相关文件(one-key-ikev2.sh,strongswan.tar.gz,strongswan文件夹,my_key文件夹).</p>
+</li>
+<li><p>卸载后记得检查iptables配置.</p>
+</li>
+</ol>
+<h2 id="分支说明"><a href="#分支说明" class="headerlink" title="分支说明"></a><strong>分支说明</strong></h2><ul>
+<li><a href="https://github.com/quericy/one-key-ikev2-vpn/tree/master" target="_blank" rel="noopener">master</a>分支:经过测试的相对稳定的版本;</li>
+<li><a href="https://github.com/quericy/one-key-ikev2-vpn/tree/dev-debian" target="_blank" rel="noopener">dev-debian</a>分支:Debian6/7测试分支,该脚本由<a href="https://github.com/bestoa" target="_blank" rel="noopener">bestoa</a>修改提供;</li>
+<li><a href="https://github.com/quericy/one-key-ikev2-vpn/tree/dev" target="_blank" rel="noopener">dev</a>分支:开发分支,使用最新版本的strongswan,未进过充分测试,用于尝试和添加一些新的功能,未来可能添加对L2TP的兼容支持,以及对ipv6的支持;</li>
+</ul>
+<h2 id="部分问题解决方案"><a href="#部分问题解决方案" class="headerlink" title="部分问题解决方案"></a><strong>部分问题解决方案</strong></h2><ul>
+<li><p>ipsec启动问题：服务器重启后默认ipsec不会自启动，请命令手动开启,或添加<code>/usr/local/sbin/ipsec start</code>到自启动脚本文件中(如rc.local等)</p>
+</li>
+<li><p>ipsec常用指令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ipsec start    <span class="comment">#启动服务</span></span><br><span class="line">ipsec stop     <span class="comment">#关闭服务</span></span><br><span class="line">ipsec restart <span class="comment">#重启服务</span></span><br><span class="line">ipsec reload  <span class="comment">#重新读取</span></span><br><span class="line">ipsec status   <span class="comment">#查看状态</span></span><br><span class="line">ipsec --<span class="built_in">help</span>   <span class="comment">#查看帮助</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可连接但是无法访问网络：</p>
+<ul>
+<li>检查iptables是否正常启用,检查iptables规则是否与其他地方冲突,或根据服务器防火墙的实际情况手动修改配置。</li>
+<li>检查sysctl是否开启ip_forward:<ol>
+<li>打开sysctl文件:<code>vim /etc/sysctl.conf</code></li>
+<li>修改<code>net.ipv4.ip_forward=1</code>后保存并关闭文件</li>
+<li>使用以下指令刷新sysctl：<code>sysctl -p</code></li>
+<li>如执行后正常回显则表示生效。如显示错误信息，请重新打开/etc/syctl并根据错误信息对应部分用#号注释，保存后再刷新sysctl直至不会报错为止。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>如果之前使用的自签名证书，后改用SSL证书，部分客户端可能需要卸载之前安装的自签名证书,否则可能会报Ike凭证不可接受的错误:</p>
+<ul>
+<li>iOS：设置-通用，删除证书对应的描述文件即可；</li>
+<li>Windows：Win+R,运行mmc打开Microsoft管理控制台,文件-&gt;添加管理单元,添加证书管理单元(必须选计算机账户),展开受信任的根证书颁发机构,找到对应的自签名证书,右键删除即可;</li>
+<li>Windows Phone:暂时没有找到可以卸载证书的方法(除非越狱),目前只能重置来解决此问题</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="IPSec-L2tp"><a href="#IPSec-L2tp" class="headerlink" title="IPSec/L2tp"></a>IPSec/L2tp</h1><p>很久之前搭建的L2tp服务器，顺便记录下</p>
+<p>ipsec用于验证和加密数据包，由openswan提供；l2tp即第二层隧道协议，由xl2tpd提供。 </p>
+<p>以下是在我的linode VPS上安装 L2TP / IPSec VPN 的记录（用了openswan+xl2tpd实现）：</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>VPS:linode</p>
+<p>OS: ubuntu 12.04.5 LTS</p>
+<h2 id="安装openswan"><a href="#安装openswan" class="headerlink" title="安装openswan"></a>安装openswan</h2><h3 id="下载openswan"><a href="#下载openswan" class="headerlink" title="下载openswan"></a>下载openswan</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install openswan</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改-etc-ipsec-conf："><a href="#修改-etc-ipsec-conf：" class="headerlink" title="修改/etc/ipsec.conf："></a>修改/etc/ipsec.conf：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">version 2.0</span><br><span class="line">config setup</span><br><span class="line">	nat_traversal=yes</span><br><span class="line">	virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12</span><br><span class="line">	oe=off</span><br><span class="line">	protostack=netkey</span><br><span class="line"></span><br><span class="line">conn L2TP-PSK-NAT</span><br><span class="line">	rightsubnet=vhost:%priv</span><br><span class="line">	also=L2TP-PSK-noNAT</span><br><span class="line"></span><br><span class="line">conn L2TP-PSK-noNAT</span><br><span class="line">	authby=secret</span><br><span class="line">	pfs=no</span><br><span class="line">	auto=add</span><br><span class="line">	keyingtries=3</span><br><span class="line">	rekey=no</span><br><span class="line">	ikelifetime=8h</span><br><span class="line">	keylife=1h</span><br><span class="line">	type=transport</span><br><span class="line">	left=这里填写IP地址</span><br><span class="line">	leftprotoport=17/1701</span><br><span class="line">	right=%any</span><br><span class="line">rightprotoport=17/%any</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改-etc-ipsec-secrets"><a href="#修改-etc-ipsec-secrets" class="headerlink" title="修改/etc/ipsec.secrets"></a>修改/etc/ipsec.secrets</h3><p>注意把%YOUR.SERVER.IP.ADDRESS%替换成你的服务器地址。另外国外论坛也有提到第二种写法可以避免一些不必要的问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%YOUR.SERVER.IP.ADDRESS% %any: PSK “YourSharedSecret”</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">: PSK “YourSharedSecret”</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改包转发设置"><a href="#修改包转发设置" class="headerlink" title="修改包转发设置"></a>修改包转发设置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> each <span class="keyword">in</span> /proc/sys/net/ipv4/conf/*</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line"><span class="built_in">echo</span> 0 &gt; <span class="variable">$each</span>/accept_redirects</span><br><span class="line"><span class="built_in">echo</span> 0 &gt; <span class="variable">$each</span>/send_redirects</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">echo</span> 1 &gt; /proc/sys/net/ipv4/ip_forward</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启并检查ipsec配置"><a href="#重启并检查ipsec配置" class="headerlink" title="重启并检查ipsec配置"></a>重启并检查ipsec配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo service ipsec restart</span><br><span class="line">sudo ipsec verify</span><br></pre></td></tr></table></figure>
+
+<p>输出没有FAILED项即可，WARNING可以不管。<br>除了Opportunistic Encryption Support外，其他应该均正常</p>
+<p>我碰到的2个错误和解决方法：<br><strong>a：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Two or more interfaces found, checking IP forwarding [FAILED]</span><br></pre></td></tr></table></figure>
+
+<p>原因为未执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> 1 &gt; /proc/sys/net/ipv4/ip_forward</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<p><strong>b：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Pluto listening for IKE on udp 500 [FAILED]</span><br><span class="line">Cannot execute command “lsof -i UDP:500″: No such file or directory</span><br><span class="line">Pluto listening for NAT-T on udp 4500 [FAILED]</span><br><span class="line">Cannot execute command “lsof -i UDP:4500″: No such file or directory</span><br></pre></td></tr></table></figure>
+
+<p>原因为lsof未安装，需<code>apt-get install lsof</code></p>
+<h3 id="最后重启ipsec服务"><a href="#最后重启ipsec服务" class="headerlink" title="最后重启ipsec服务"></a>最后重启ipsec服务</h3><p>可试着新建一个 ipsec+l2tp 的连接，填好服务器地址和 SharedKey，点连接拨号,查看服务器那边的 /var/log/auth.log</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">clrngd</span><br><span class="line">rngd</span><br><span class="line">/etc/init.d/ipsec restart</span><br><span class="line">tail -f /var/<span class="built_in">log</span>/auth.log</span><br></pre></td></tr></table></figure>
+
+<p>如果出现了类似记录即正常</p>
+<p><code>STATE_QUICK_R2: IPsec SA established transport mode</code></p>
+<p>同时，将上面这段代码完整地复制一次，加入到 /etc/rc.local 中，使其在每次系统启动时都生效。</p>
+<h2 id="安装L2TP服务"><a href="#安装L2TP服务" class="headerlink" title="安装L2TP服务"></a>安装L2TP服务</h2><h3 id="下载xl2tpd"><a href="#下载xl2tpd" class="headerlink" title="下载xl2tpd"></a>下载xl2tpd</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install xl2tpd</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改-etc-xl2tpd-xl2tpd-conf"><a href="#修改-etc-xl2tpd-xl2tpd-conf" class="headerlink" title="修改/etc/xl2tpd/xl2tpd.conf"></a>修改/etc/xl2tpd/xl2tpd.conf</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[global]</span><br><span class="line">ipsec saref = yes</span><br><span class="line"></span><br><span class="line">[lns default]</span><br><span class="line">ip range = 10.121.121.100-10.121.121.155</span><br><span class="line">local ip = 10.121.121.1</span><br><span class="line">refuse chap = yes</span><br><span class="line">refuse pap = yes</span><br><span class="line">require authentication = yes</span><br><span class="line">ppp debug = yes</span><br><span class="line">pppoptfile = /etc/ppp/options.xl2tpd</span><br><span class="line">length bit = yes</span><br></pre></td></tr></table></figure>
+
+<p>ip range和local ip根据自己的需要定义</p>
+<h2 id="安装PPP服务，用来管理-VPN-用户"><a href="#安装PPP服务，用来管理-VPN-用户" class="headerlink" title="安装PPP服务，用来管理 VPN 用户"></a>安装PPP服务，用来管理 VPN 用户</h2><h3 id="下载ppp"><a href="#下载ppp" class="headerlink" title="下载ppp"></a>下载ppp</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install ppp</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改-etc-ppp-options-xl2tpd"><a href="#修改-etc-ppp-options-xl2tpd" class="headerlink" title="修改/etc/ppp/options.xl2tpd"></a>修改/etc/ppp/options.xl2tpd</h3><p>没有的话建一个，为防止DNS污染，用了谷歌的DNS，也可用其他的DNS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">require-mschap-v2</span><br><span class="line">ms-dns 8.8.8.8</span><br><span class="line">ms-dns 8.8.4.4</span><br><span class="line">asyncmap 0</span><br><span class="line">auth</span><br><span class="line">crtscts</span><br><span class="line">lock</span><br><span class="line">hide-password</span><br><span class="line">modem</span><br><span class="line">debug</span><br><span class="line">name l2tpd</span><br><span class="line">proxyarp</span><br><span class="line">lcp-echo-interval 30</span><br><span class="line">lcp-echo-failure 4</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改-etc-ppp-chap-secrets"><a href="#修改-etc-ppp-chap-secrets" class="headerlink" title="修改 /etc/ppp/chap-secrets"></a>修改 /etc/ppp/chap-secrets</h3><p>设置拨号的用户名和密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># user server password ip</span><br></pre></td></tr></table></figure>
+
+<h2 id="重启xl2tpd服务"><a href="#重启xl2tpd服务" class="headerlink" title="重启xl2tpd服务"></a>重启xl2tpd服务</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/xl2tpd restart</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改iptables防火墙，启用包转发"><a href="#修改iptables防火墙，启用包转发" class="headerlink" title="修改iptables防火墙，启用包转发"></a>修改iptables防火墙，启用包转发</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables –table nat –append POSTROUTING –jump MASQUERADE</span><br><span class="line">iptables -t nat -A POSTROUTING -s 10.121.121.0/24 -o eth0 -j MASQUERADE</span><br><span class="line">iptables -t nat -A POSTROUTING -j MASQUERADE</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="PPTP"><a href="#PPTP" class="headerlink" title="PPTP"></a>PPTP</h1><p>记录了更早之前搭建的VPN</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">apt-get install pptpd</span><br><span class="line">vi /etc/pptpd.conf</span><br><span class="line">vi /etc/ppp/options</span><br><span class="line">vi /etc/ppp/pptpd-options</span><br><span class="line">/etc/init.d/pptpd restart</span><br><span class="line">iptables -t nat -A POSTROUTING -s 172.16.121.0/16 -o eth0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
+
+<p>三个文件内容分别为：</p>
+<p>pptpd.conf:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">option /etc/ppp/pptpd-options</span><br><span class="line">logwtmp</span><br><span class="line"></span><br><span class="line">localip 你的ip</span><br><span class="line">remoteip 172.16.121.100-150  #自己定义</span><br></pre></td></tr></table></figure>
+
+<p>optons:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">asyncmap 0</span><br><span class="line">noauth</span><br><span class="line">crtscts</span><br><span class="line">lock</span><br><span class="line">hide-password</span><br><span class="line">modem</span><br><span class="line">lcp-echo-interval 30</span><br><span class="line">lcp-echo-failure 4</span><br><span class="line">noipx</span><br><span class="line">ms-dns 8.8.8.8</span><br><span class="line">logfile /var/log/ppp.log</span><br></pre></td></tr></table></figure>
+
+<p>pptpd-options:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">name 你的ip</span><br><span class="line">refuse-pap</span><br><span class="line">refuse-chap</span><br><span class="line">refuse-mschap</span><br><span class="line">require-mschap-v2</span><br><span class="line">require-mppe-128</span><br><span class="line">proxyarp</span><br><span class="line">nodefaultroute</span><br><span class="line">lock</span><br><span class="line">nobsdcomp </span><br><span class="line">logfile /var/log/pptpd.log</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/VPN/" rel="tag"># VPN</a>
+          
+            <a href="/tags/Linode/" rel="tag"># Linode</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/96723aac/" rel="next" title="Hexo 修改永久链接的默认格式">
+                <i class="fa fa-chevron-left"></i> Hexo 修改永久链接的默认格式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/73a817fb/" rel="prev" title="Hexo中使用hexo-asset-image添加本地图片">
+                Hexo中使用hexo-asset-image添加本地图片 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Cyril Xu">
+            
+              <p class="site-author-name" itemprop="name">Cyril Xu</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IPSec-ikev2"><span class="nav-number">2.</span> <span class="nav-text">IPSec/ikev2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特性"><span class="nav-number">2.1.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端安装说明"><span class="nav-number">2.2.</span> <span class="nav-text">服务端安装说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端配置说明"><span class="nav-number">2.3.</span> <span class="nav-text">客户端配置说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卸载方式"><span class="nav-number">2.4.</span> <span class="nav-text">卸载方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分支说明"><span class="nav-number">2.5.</span> <span class="nav-text">分支说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部分问题解决方案"><span class="nav-number">2.6.</span> <span class="nav-text">部分问题解决方案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IPSec-L2tp"><span class="nav-number">3.</span> <span class="nav-text">IPSec/L2tp</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">3.1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装openswan"><span class="nav-number">3.2.</span> <span class="nav-text">安装openswan</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载openswan"><span class="nav-number">3.2.1.</span> <span class="nav-text">下载openswan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-etc-ipsec-conf："><span class="nav-number">3.2.2.</span> <span class="nav-text">修改/etc/ipsec.conf：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-etc-ipsec-secrets"><span class="nav-number">3.2.3.</span> <span class="nav-text">修改/etc/ipsec.secrets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改包转发设置"><span class="nav-number">3.2.4.</span> <span class="nav-text">修改包转发设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重启并检查ipsec配置"><span class="nav-number">3.2.5.</span> <span class="nav-text">重启并检查ipsec配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后重启ipsec服务"><span class="nav-number">3.2.6.</span> <span class="nav-text">最后重启ipsec服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装L2TP服务"><span class="nav-number">3.3.</span> <span class="nav-text">安装L2TP服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载xl2tpd"><span class="nav-number">3.3.1.</span> <span class="nav-text">下载xl2tpd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-etc-xl2tpd-xl2tpd-conf"><span class="nav-number">3.3.2.</span> <span class="nav-text">修改/etc/xl2tpd/xl2tpd.conf</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装PPP服务，用来管理-VPN-用户"><span class="nav-number">3.4.</span> <span class="nav-text">安装PPP服务，用来管理 VPN 用户</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载ppp"><span class="nav-number">3.4.1.</span> <span class="nav-text">下载ppp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-etc-ppp-options-xl2tpd"><span class="nav-number">3.4.2.</span> <span class="nav-text">修改/etc/ppp/options.xl2tpd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-etc-ppp-chap-secrets"><span class="nav-number">3.4.3.</span> <span class="nav-text">修改 /etc/ppp/chap-secrets</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重启xl2tpd服务"><span class="nav-number">3.5.</span> <span class="nav-text">重启xl2tpd服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改iptables防火墙，启用包转发"><span class="nav-number">3.6.</span> <span class="nav-text">修改iptables防火墙，启用包转发</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PPTP"><span class="nav-number">4.</span> <span class="nav-text">PPTP</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">  <a href="http://www.beian.miit.gov.cn" rel="noopener" target="_blank">冀ICP备15007634 </a>&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyril Xu</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

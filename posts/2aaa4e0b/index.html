@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"未找到任何关于 ${query} 的结果","hits_stats":"${time}ms 内共找到 ${hits} 条结果"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言今天同学问我要office的注册码，我说我家都是在路由器上安装的KMS激活服务器。为了给同学们用，我准备在我的VPS上搭建KMS服务器。 介绍基于vlmcsd搭建的KMS服务器。根据github上的说明，这个工具是用C写的，没有任何依赖，可以直接运行。而且它横跨几乎现在所有的系统平台，如Android, FreeBSD, Solaris, Minix, Mac OS, iOS, Windows">
+<meta name="keywords" content="KMS,vlmcsd,ubuntu,激活">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Ubuntu中搭建KMS服务器">
+<meta property="og:url" content="http://www.cyrilxu.cn/posts/2aaa4e0b/index.html">
+<meta property="og:site_name" content="Cyril&#39;s Blog">
+<meta property="og:description" content="前言今天同学问我要office的注册码，我说我家都是在路由器上安装的KMS激活服务器。为了给同学们用，我准备在我的VPS上搭建KMS服务器。 介绍基于vlmcsd搭建的KMS服务器。根据github上的说明，这个工具是用C写的，没有任何依赖，可以直接运行。而且它横跨几乎现在所有的系统平台，如Android, FreeBSD, Solaris, Minix, Mac OS, iOS, Windows">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-08-27T07:24:16.693Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在Ubuntu中搭建KMS服务器">
+<meta name="twitter:description" content="前言今天同学问我要office的注册码，我说我家都是在路由器上安装的KMS激活服务器。为了给同学们用，我准备在我的VPS上搭建KMS服务器。 介绍基于vlmcsd搭建的KMS服务器。根据github上的说明，这个工具是用C写的，没有任何依赖，可以直接运行。而且它横跨几乎现在所有的系统平台，如Android, FreeBSD, Solaris, Minix, Mac OS, iOS, Windows">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Cyril's Blog" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://www.cyrilxu.cn/posts/2aaa4e0b/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>在Ubuntu中搭建KMS服务器 | Cyril's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyril's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">关于明天的事，我们后天就知道了</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.cyrilxu.cn/posts/2aaa4e0b/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Cyril Xu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyril's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">在Ubuntu中搭建KMS服务器
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-16 21:26:06" itemprop="dateCreated datePublished" datetime="2019-07-16T21:26:06+08:00">2019-07-16</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/贪玩/" itemprop="url" rel="index"><span itemprop="name">贪玩</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天同学问我要office的注册码，我说我家都是在路由器上安装的KMS激活服务器。为了给同学们用，我准备在我的VPS上搭建KMS服务器。</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>基于<a href="https://github.com/Wind4/vlmcsd" target="_blank" rel="noopener">vlmcsd</a>搭建的KMS服务器。<br>根据github上的说明，这个工具是用C写的，没有任何依赖，可以直接运行。而且它横跨几乎现在所有的系统平台，如Android, FreeBSD, Solaris, Minix, Mac OS, iOS, Windows。相比于另一款工具<a href="https://github.com/myanaloglife/py-kms" target="_blank" rel="noopener">py-kms</a>需要依赖pyhont2或者python3，可谓是非常干净舒爽。</p>
+<a id="more"></a>
+
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ol>
+<li><p>在任意环境中，下载最新的vlmcsd releases版本，<a href="https://github.com/Wind4/vlmcsd/releases" target="_blank" rel="noopener">下载地址</a>。如在linux中，可以使用wget下载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/Wind4/vlmcsd/releases/download/svn1112/binaries.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压我们下载的包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf binaries.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入对应的目录。如Ubuntu系统，我们可以进入binaries/Linux/intel/static目录中</p>
+</li>
+<li><p>选择对应的文件，这里我们选择vlmcsdmulti-x64-musl-static文件。然后把这个文件放到我们想要的文件中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv vlmcsdmulti-x64-musl-static /usr/<span class="built_in">local</span>/kms-server</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行chmod命令，为这个文件赋予权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod u+x /usr/<span class="built_in">local</span>/kms-server</span><br></pre></td></tr></table></figure>
+
+<p>权限赋予完毕之后，直接执行命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/kms-server/vlmcsdmulti-x64-musl-static vlmcsd</span><br></pre></td></tr></table></figure>
+
+<p>如果没有任何错误提示，代表我们成功了。不放心的话，可以再执行一遍，会提示我们端口(1688)和地址已经被占用。</p>
+</li>
+<li><p>若有防火墙，记得把1688端口开放，然后加入自启动。如在Ubuntu中，可以编辑/etc/rc.local文件，在启动项里加入启动命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/kms-server/vlmcsdmulti-x64-musl-static vlmcsd</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="激活"><a href="#激活" class="headerlink" title="激活"></a>激活</h1><h2 id="激活Windows"><a href="#激活Windows" class="headerlink" title="激活Windows"></a>激活Windows</h2><ol>
+<li><p>复制以下文本</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /d "<span class="variable">%SystemRoot%</span>\system32"</span><br><span class="line">slmgr.vbs -ipk windoes对应版本的GVLK</span><br><span class="line">slmgr.vbs -skms 你的VPS的IP或者域名</span><br><span class="line">slmgr.vbs -ato</span><br><span class="line">slmgr.vbs /xpr</span><br></pre></td></tr></table></figure>
+
+<p>存成bat格式的文件，然后右键以<strong>管理员身份</strong>运行。</p>
+</li>
+<li><p>验证是否激活。在cmd或powershell中执行</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slmgr.vbs -dlv</span><br></pre></td></tr></table></figure>
+
+<p>不出意外的话，会显示已经激活成功的信息。</p>
+</li>
+</ol>
+<h2 id="激活office"><a href="#激活office" class="headerlink" title="激活office"></a>激活office</h2><p>   同理</p>
+   <figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> office目录，比如C:\Program Files\Microsoft Office\Office15</span><br><span class="line">cscript ospp.vbs /inpkey:office对应版本的GVLK</span><br><span class="line">cscript ospp.vbs /sethst:你的VPS的IP或者域名</span><br><span class="line">cscript ospp.vbs /act</span><br></pre></td></tr></table></figure>
+
+<h2 id="附录：GVLKs"><a href="#附录：GVLKs" class="headerlink" title="附录：GVLKs"></a>附录：GVLKs</h2><p>来自原作者的<a href="http://wind4.github.io/vlmcsd/" target="_blank" rel="noopener">github pages</a></p>
+<h3 id="Windows-10"><a href="#Windows-10" class="headerlink" title="Windows 10"></a>Windows 10</h3><table>
+<thead>
+<tr>
+<th>Operating system edition</th>
+<th>KMS Client Setup Key</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows 10 Core</td>
+<td>TX9XD-98N7V-6WMQ6-BX7FG-H8Q99</td>
+</tr>
+<tr>
+<td>Windows 10 Core N</td>
+<td>3KHY7-WNT83-DGQKR-F7HPR-844BM</td>
+</tr>
+<tr>
+<td>Windows 10 Core Country Specific</td>
+<td>PVMJN-6DFY6-9CCP6-7BKTT-D3WVR</td>
+</tr>
+<tr>
+<td>Windows 10 Core Single Language</td>
+<td>7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH</td>
+</tr>
+<tr>
+<td>Windows 10 Professional</td>
+<td>W269N-WFGWX-YVC9B-4J6C9-T83GX</td>
+</tr>
+<tr>
+<td>Windows 10 Professional N</td>
+<td>MH37W-N47XK-V7XM9-C7227-GCQG9</td>
+</tr>
+<tr>
+<td>Windows 10 Enterprise</td>
+<td>NPPR9-FWDCX-D2C8J-H872K-2YT43</td>
+</tr>
+<tr>
+<td>Windows 10 Enterprise N</td>
+<td>DPH2V-TTNVB-4X9Q3-TJR4H-KHJW4</td>
+</tr>
+<tr>
+<td>Windows 10 Education</td>
+<td>NW6C2-QMPVW-D7KKK-3GKT6-VCFB2</td>
+</tr>
+<tr>
+<td>Windows 10 Education N</td>
+<td>2WH4N-8QGBV-H22JP-CT43Q-MDWWJ</td>
+</tr>
+<tr>
+<td>Windows 10 Enterprise 2015 LTSB</td>
+<td>WNMTR-4C88C-JK8YV-HQ7T2-76DF9</td>
+</tr>
+<tr>
+<td>Windows 10 Enterprise 2015 LTSB N</td>
+<td>2F77B-TNFGY-69QQF-B8YKP-D69TJ</td>
+</tr>
+<tr>
+<td>Windows 10 Enterprise 2016 LTSB</td>
+<td>DCPHK-NFMTC-H88MJ-PFHPY-QJ4BJ</td>
+</tr>
+<tr>
+<td>Windows 10 Enterprise 2016 LTSB N</td>
+<td>QFFDN-GRT3P-VKWWX-X7T3R-8B639</td>
+</tr>
+</tbody></table>
+<h3 id="Windows-8-8-1"><a href="#Windows-8-8-1" class="headerlink" title="Windows 8 / 8.1"></a>Windows 8 / 8.1</h3><table>
+<thead>
+<tr>
+<th>Operating system edition</th>
+<th>KMS Client Setup Key</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows 8 Professional</td>
+<td>NG4HW-VH26C-733KW-K6F98-J8CK4</td>
+</tr>
+<tr>
+<td>Windows 8 Professional N</td>
+<td>XCVCF-2NXM9-723PB-MHCB7-2RYQQ</td>
+</tr>
+<tr>
+<td>Windows 8 Enterprise</td>
+<td>32JNW-9KQ84-P47T8-D8GGY-CWCK7</td>
+</tr>
+<tr>
+<td>Windows 8 Enterprise N</td>
+<td>JMNMF-RHW7P-DMY6X-RF3DR-X2BQT</td>
+</tr>
+<tr>
+<td>Windows Embedded 8 Industry Professional</td>
+<td>RYXVT-BNQG7-VD29F-DBMRY-HT73M</td>
+</tr>
+<tr>
+<td>Windows Embedded 8 Industry Enterprise</td>
+<td>NKB3R-R2F8T-3XCDP-7Q2KW-XWYQ2</td>
+</tr>
+<tr>
+<td>Windows 8.1 Professional</td>
+<td>GCRJD-8NW9H-F2CDX-CCM8D-9D6T9</td>
+</tr>
+<tr>
+<td>Windows 8.1 Professional N</td>
+<td>HMCNV-VVBFX-7HMBH-CTY9B-B4FXY</td>
+</tr>
+<tr>
+<td>Windows 8.1 Enterprise</td>
+<td>MHF9N-XY6XB-WVXMC-BTDCT-MKKG7</td>
+</tr>
+<tr>
+<td>Windows 8.1 Enterprise N</td>
+<td>TT4HM-HN7YT-62K67-RGRQJ-JFFXW</td>
+</tr>
+<tr>
+<td>Windows Embedded 8.1 Industry Pro</td>
+<td>NMMPB-38DD4-R2823-62W8D-VXKJB</td>
+</tr>
+<tr>
+<td>Windows Embedded 8.1 Industry Enterprise</td>
+<td>FNFKF-PWTVT-9RC8H-32HB2-JB34X</td>
+</tr>
+</tbody></table>
+<h3 id="Windows-7"><a href="#Windows-7" class="headerlink" title="Windows 7"></a>Windows 7</h3><table>
+<thead>
+<tr>
+<th>Operating system edition</th>
+<th>KMS Client Setup Key</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows 7 Professional</td>
+<td>FJ82H-XT6CR-J8D7P-XQJJ2-GPDD4</td>
+</tr>
+<tr>
+<td>Windows 7 Professional N</td>
+<td>MRPKT-YTG23-K7D7T-X2JMM-QY7MG</td>
+</tr>
+<tr>
+<td>Windows 7 Professional E</td>
+<td>W82YF-2Q76Y-63HXB-FGJG9-GF7QX</td>
+</tr>
+<tr>
+<td>Windows 7 Enterprise</td>
+<td>33PXH-7Y6KF-2VJC9-XBBR8-HVTHH</td>
+</tr>
+<tr>
+<td>Windows 7 Enterprise N</td>
+<td>YDRBP-3D83W-TY26F-D46B2-XCKRJ</td>
+</tr>
+<tr>
+<td>Windows 7 Enterprise E</td>
+<td>C29WB-22CC8-VJ326-GHFJW-H9DH4</td>
+</tr>
+</tbody></table>
+<h3 id="Windows-Server-2016"><a href="#Windows-Server-2016" class="headerlink" title="Windows Server 2016"></a>Windows Server 2016</h3><table>
+<thead>
+<tr>
+<th>Operating system edition</th>
+<th>KMS Client Setup Key</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows Server 2016 Datacenter</td>
+<td>CB7KF-BWN84-R7R2Y-793K2-8XDDG</td>
+</tr>
+<tr>
+<td>Windows Server 2016 Standard</td>
+<td>WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY</td>
+</tr>
+<tr>
+<td>Windows Server 2016 Essentials</td>
+<td>JCKRF-N37P4-C2D82-9YXRT-4M63B</td>
+</tr>
+</tbody></table>
+<h3 id="Windows-Server-2012"><a href="#Windows-Server-2012" class="headerlink" title="Windows Server 2012"></a>Windows Server 2012</h3><table>
+<thead>
+<tr>
+<th>Operating system edition</th>
+<th>KMS Client Setup Key</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows Server 2012</td>
+<td>BN3D2-R7TKB-3YPBD-8DRP2-27GG4</td>
+</tr>
+<tr>
+<td>Windows Server 2012 N</td>
+<td>8N2M2-HWPGY-7PGT9-HGDD8-GVGGY</td>
+</tr>
+<tr>
+<td>Windows Server 2012 Single Language</td>
+<td>2WN2H-YGCQR-KFX6K-CD6TF-84YXQ</td>
+</tr>
+<tr>
+<td>Windows Server 2012 Country Specific</td>
+<td>4K36P-JN4VD-GDC6V-KDT89-DYFKP</td>
+</tr>
+<tr>
+<td>Windows Server 2012 Server Standard</td>
+<td>XC9B7-NBPP2-83J2H-RHMBY-92BT4</td>
+</tr>
+<tr>
+<td>Windows Server 2012 MultiPoint Standard</td>
+<td>HM7DN-YVMH3-46JC3-XYTG7-CYQJJ</td>
+</tr>
+<tr>
+<td>Windows Server 2012 MultiPoint Premium</td>
+<td>XNH6W-2V9GX-RGJ4K-Y8X6F-QGJ2G</td>
+</tr>
+<tr>
+<td>Windows Server 2012 Datacenter</td>
+<td>48HP8-DN98B-MYWDG-T2DCC-8W83P</td>
+</tr>
+<tr>
+<td>Windows Server 2012 R2 Server Standard</td>
+<td>D2N9P-3P6X9-2R39C-7RTCD-MDVJX</td>
+</tr>
+<tr>
+<td>Windows Server 2012 R2 Datacenter</td>
+<td>W3GGN-FT8W3-Y4M27-J84CP-Q3VJ9</td>
+</tr>
+<tr>
+<td>Windows Server 2012 R2 Essentials</td>
+<td>KNC87-3J2TX-XB4WP-VCPJV-M4FWM</td>
+</tr>
+</tbody></table>
+<h3 id="Windows-Server-2008"><a href="#Windows-Server-2008" class="headerlink" title="Windows Server 2008"></a>Windows Server 2008</h3><table>
+<thead>
+<tr>
+<th>Operating system edition</th>
+<th>KMS Client Setup Key</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows Server 2008 Web</td>
+<td>WYR28-R7TFJ-3X2YQ-YCY4H-M249D</td>
+</tr>
+<tr>
+<td>Windows Server 2008 Standard</td>
+<td>TM24T-X9RMF-VWXK6-X8JC9-BFGM2</td>
+</tr>
+<tr>
+<td>Windows Server 2008 Standard without Hyper-V</td>
+<td>W7VD6-7JFBR-RX26B-YKQ3Y-6FFFJ</td>
+</tr>
+<tr>
+<td>Windows Server 2008 Enterprise</td>
+<td>YQGMW-MPWTJ-34KDK-48M3W-X4Q6V</td>
+</tr>
+<tr>
+<td>Windows Server 2008 Enterprise without Hyper-V</td>
+<td>39BXF-X8Q23-P2WWT-38T2F-G3FPG</td>
+</tr>
+<tr>
+<td>Windows Server 2008 HPC</td>
+<td>RCTX3-KWVHP-BR6TB-RB6DM-6X7HP</td>
+</tr>
+<tr>
+<td>Windows Server 2008 Datacenter</td>
+<td>7M67G-PC374-GR742-YH8V4-TCBY3</td>
+</tr>
+<tr>
+<td>Windows Server 2008 Datacenter without Hyper-V</td>
+<td>22XQ2-VRXRG-P8D42-K34TD-G3QQC</td>
+</tr>
+<tr>
+<td>Windows Server 2008 for Itanium-Based Systems</td>
+<td>4DWFP-JF3DJ-B7DTH-78FJB-PDRHK</td>
+</tr>
+<tr>
+<td>Windows Server 2008 R2 Web</td>
+<td>6TPJF-RBVHG-WBW2R-86QPH-6RTM4</td>
+</tr>
+<tr>
+<td>Windows Server 2008 R2 HPC edition</td>
+<td>TT8MH-CG224-D3D7Q-498W2-9QCTX</td>
+</tr>
+<tr>
+<td>Windows Server 2008 R2 Standard</td>
+<td>YC6KT-GKW9T-YTKYR-T4X34-R7VHC</td>
+</tr>
+<tr>
+<td>Windows Server 2008 R2 Enterprise</td>
+<td>489J6-VHDMP-X63PK-3K798-CPX3Y</td>
+</tr>
+<tr>
+<td>Windows Server 2008 R2 Datacenter</td>
+<td>74YFP-3QFB3-KQT8W-PMXWJ-7M648</td>
+</tr>
+<tr>
+<td>Windows Server 2008 R2 for Itanium-based Systems</td>
+<td>GT63C-RJFQ3-4GMB6-BRFB9-CB83V</td>
+</tr>
+</tbody></table>
+<h3 id="Office-2019"><a href="#Office-2019" class="headerlink" title="Office 2019"></a>Office 2019</h3><table>
+<thead>
+<tr>
+<th>Product</th>
+<th>GVLK</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Office Professional Plus 2019</td>
+<td>NMMKJ-6RK4F-KMJVX-8D9MJ-6MWKP</td>
+</tr>
+<tr>
+<td>Office Standard 2019</td>
+<td>6NWWJ-YQWMR-QKGCB-6TMB3-9D9HK</td>
+</tr>
+<tr>
+<td>Project Professional 2019</td>
+<td>B4NPR-3FKK7-T2MBV-FRQ4W-PKD2B</td>
+</tr>
+<tr>
+<td>Project Standard 2019</td>
+<td>C4F7P-NCP8C-6CQPT-MQHV9-JXD2M</td>
+</tr>
+<tr>
+<td>Visio Professional 2019</td>
+<td>9BGNQ-K37YR-RQHF2-38RQ3-7VCBB</td>
+</tr>
+<tr>
+<td>Visio Standard 2019</td>
+<td>7TQNQ-K3YQQ-3PFH7-CCPPM-X4VQ2</td>
+</tr>
+<tr>
+<td>Access 2019</td>
+<td>9N9PT-27V4Y-VJ2PD-YXFMF-YTFQT</td>
+</tr>
+<tr>
+<td>Excel 2019</td>
+<td>TMJWT-YYNMB-3BKTF-644FC-RVXBD</td>
+</tr>
+<tr>
+<td>Outlook 2019</td>
+<td>7HD7K-N4PVK-BHBCQ-YWQRW-XW4VK</td>
+</tr>
+<tr>
+<td>PowerPoint 2019</td>
+<td>RRNCX-C64HY-W2MM7-MCH9G-TJHMQ</td>
+</tr>
+<tr>
+<td>Publisher 2019</td>
+<td>G2KWX-3NW6P-PY93R-JXK2T-C9Y9V</td>
+</tr>
+<tr>
+<td>Skype for Business 2019</td>
+<td>NCJ33-JHBBY-HTK98-MYCV8-HMKHJ</td>
+</tr>
+<tr>
+<td>Word 2019</td>
+<td>PBX3G-NWMT6-Q7XBW-PYJGG-WXD33</td>
+</tr>
+</tbody></table>
+<h3 id="Office-2016"><a href="#Office-2016" class="headerlink" title="Office 2016"></a>Office 2016</h3><table>
+<thead>
+<tr>
+<th>Product</th>
+<th>GVLK</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Office Professional Plus 2016</td>
+<td>XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99</td>
+</tr>
+<tr>
+<td>Office Standard 2016</td>
+<td>JNRGM-WHDWX-FJJG3-K47QV-DRTFM</td>
+</tr>
+<tr>
+<td>Project Professional 2016</td>
+<td>YG9NW-3K39V-2T3HJ-93F3Q-G83KT</td>
+</tr>
+<tr>
+<td>Project Standard 2016</td>
+<td>GNFHQ-F6YQM-KQDGJ-327XX-KQBVC</td>
+</tr>
+<tr>
+<td>Visio Professional 2016</td>
+<td>PD3PC-RHNGV-FXJ29-8JK7D-RJRJK</td>
+</tr>
+<tr>
+<td>Visio Standard 2016</td>
+<td>7WHWN-4T7MP-G96JF-G33KR-W8GF4</td>
+</tr>
+<tr>
+<td>Access 2016</td>
+<td>GNH9Y-D2J4T-FJHGG-QRVH7-QPFDW</td>
+</tr>
+<tr>
+<td>Excel 2016</td>
+<td>9C2PK-NWTVB-JMPW8-BFT28-7FTBF</td>
+</tr>
+<tr>
+<td>OneNote 2016</td>
+<td>DR92N-9HTF2-97XKM-XW2WJ-XW3J6</td>
+</tr>
+<tr>
+<td>Outlook 2016</td>
+<td>R69KK-NTPKF-7M3Q4-QYBHW-6MT9B</td>
+</tr>
+<tr>
+<td>PowerPoint 2016</td>
+<td>J7MQP-HNJ4Y-WJ7YM-PFYGF-BY6C6</td>
+</tr>
+<tr>
+<td>Publisher 2016</td>
+<td>F47MM-N3XJP-TQXJ9-BP99D-8K837</td>
+</tr>
+<tr>
+<td>Skype for Business 2016</td>
+<td>869NQ-FJ69K-466HW-QYCP2-DDBV6</td>
+</tr>
+<tr>
+<td>Word 2016</td>
+<td>WXY84-JN2Q9-RBCCQ-3Q3J3-3PFJ6</td>
+</tr>
+</tbody></table>
+<h3 id="Office-2013"><a href="#Office-2013" class="headerlink" title="Office 2013"></a>Office 2013</h3><table>
+<thead>
+<tr>
+<th>Product</th>
+<th>GVLK</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Office 2013 Professional Plus</td>
+<td>YC7DK-G2NP3-2QQC3-J6H88-GVGXT</td>
+</tr>
+<tr>
+<td>Office 2013 Standard</td>
+<td>KBKQT-2NMXY-JJWGP-M62JB-92CD4</td>
+</tr>
+<tr>
+<td>Project 2013 Professional</td>
+<td>FN8TT-7WMH6-2D4X9-M337T-2342K</td>
+</tr>
+<tr>
+<td>Project 2013 Standard</td>
+<td>6NTH3-CW976-3G3Y2-JK3TX-8QHTT</td>
+</tr>
+<tr>
+<td>Visio 2013 Professional</td>
+<td>C2FG9-N6J68-H8BTJ-BW3QX-RM3B3</td>
+</tr>
+<tr>
+<td>Visio 2013 Standard</td>
+<td>J484Y-4NKBF-W2HMG-DBMJC-PGWR7</td>
+</tr>
+<tr>
+<td>Access 2013</td>
+<td>NG2JY-H4JBT-HQXYP-78QH9-4JM2D</td>
+</tr>
+<tr>
+<td>Excel 2013</td>
+<td>VGPNG-Y7HQW-9RHP7-TKPV3-BG7GB</td>
+</tr>
+<tr>
+<td>InfoPath 2013</td>
+<td>DKT8B-N7VXH-D963P-Q4PHY-F8894</td>
+</tr>
+<tr>
+<td>Lync 2013</td>
+<td>2MG3G-3BNTT-3MFW9-KDQW3-TCK7R</td>
+</tr>
+<tr>
+<td>OneNote 2013</td>
+<td>TGN6P-8MMBC-37P2F-XHXXK-P34VW</td>
+</tr>
+<tr>
+<td>Outlook 2013</td>
+<td>QPN8Q-BJBTJ-334K3-93TGY-2PMBT</td>
+</tr>
+<tr>
+<td>PowerPoint 2013</td>
+<td>4NT99-8RJFH-Q2VDH-KYG2C-4RD4F</td>
+</tr>
+<tr>
+<td>Publisher 2013</td>
+<td>PN2WF-29XG2-T9HJ7-JQPJR-FCXK4</td>
+</tr>
+<tr>
+<td>Word 2013</td>
+<td>6Q7VD-NX8JD-WJ2VH-88V73-4GBJ7</td>
+</tr>
+</tbody></table>
+<h3 id="Office-2010"><a href="#Office-2010" class="headerlink" title="Office 2010"></a>Office 2010</h3><table>
+<thead>
+<tr>
+<th>Product</th>
+<th>GVLK</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Office Professional Plus 2010</td>
+<td>VYBBJ-TRJPB-QFQRF-QFT4D-H3GVB</td>
+</tr>
+<tr>
+<td>Office Standard 2010</td>
+<td>V7QKV-4XVVR-XYV4D-F7DFM-8R6BM</td>
+</tr>
+<tr>
+<td>Access 2010</td>
+<td>V7Y44-9T38C-R2VJK-666HK-T7DDX</td>
+</tr>
+<tr>
+<td>Excel 2010</td>
+<td>H62QG-HXVKF-PP4HP-66KMR-CW9BM</td>
+</tr>
+<tr>
+<td>SharePoint Workspace 2010</td>
+<td>QYYW6-QP4CB-MBV6G-HYMCJ-4T3J4</td>
+</tr>
+<tr>
+<td>InfoPath 2010</td>
+<td>K96W8-67RPQ-62T9Y-J8FQJ-BT37T</td>
+</tr>
+<tr>
+<td>OneNote 2010</td>
+<td>Q4Y4M-RHWJM-PY37F-MTKWH-D3XHX</td>
+</tr>
+<tr>
+<td>Outlook 2010</td>
+<td>7YDC2-CWM8M-RRTJC-8MDVC-X3DWQ</td>
+</tr>
+<tr>
+<td>PowerPoint 2010</td>
+<td>RC8FX-88JRY-3PF7C-X8P67-P4VTT</td>
+</tr>
+<tr>
+<td>Project Professional 2010</td>
+<td>YGX6F-PGV49-PGW3J-9BTGG-VHKC6</td>
+</tr>
+<tr>
+<td>Project Standard 2010</td>
+<td>4HP3K-88W3F-W2K3D-6677X-F9PGB</td>
+</tr>
+<tr>
+<td>Publisher 2010</td>
+<td>BFK7F-9MYHM-V68C7-DRQ66-83YTP</td>
+</tr>
+<tr>
+<td>Word 2010</td>
+<td>HVHB3-C6FV7-KQX9W-YQG79-CRY7T</td>
+</tr>
+<tr>
+<td>Visio Standard 2010</td>
+<td>767HD-QGMWX-8QTDB-9G3R2-KHFGJ</td>
+</tr>
+<tr>
+<td>Visio Professional 2010</td>
+<td>7MCW8-VRQVK-G677T-PDJCM-Q8TCP</td>
+</tr>
+<tr>
+<td>Visio Premium 2010</td>
+<td>D9DWC-HPYVV-JGF4P-BTWQB-WX8BJ</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/KMS/" rel="tag"># KMS</a>
+          
+            <a href="/tags/vlmcsd/" rel="tag"># vlmcsd</a>
+          
+            <a href="/tags/ubuntu/" rel="tag"># ubuntu</a>
+          
+            <a href="/tags/激活/" rel="tag"># 激活</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/21f4d5f9/" rel="next" title="sequelize的基本操作">
+                <i class="fa fa-chevron-left"></i> sequelize的基本操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/27dd4a58/" rel="prev" title="写在一周年">
+                写在一周年 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Cyril Xu">
+            
+              <p class="site-author-name" itemprop="name">Cyril Xu</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">2.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">3.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#激活"><span class="nav-number">4.</span> <span class="nav-text">激活</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#激活Windows"><span class="nav-number">4.1.</span> <span class="nav-text">激活Windows</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#激活office"><span class="nav-number">4.2.</span> <span class="nav-text">激活office</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附录：GVLKs"><span class="nav-number">4.3.</span> <span class="nav-text">附录：GVLKs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-10"><span class="nav-number">4.3.1.</span> <span class="nav-text">Windows 10</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-8-8-1"><span class="nav-number">4.3.2.</span> <span class="nav-text">Windows 8 / 8.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-7"><span class="nav-number">4.3.3.</span> <span class="nav-text">Windows 7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-Server-2016"><span class="nav-number">4.3.4.</span> <span class="nav-text">Windows Server 2016</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-Server-2012"><span class="nav-number">4.3.5.</span> <span class="nav-text">Windows Server 2012</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-Server-2008"><span class="nav-number">4.3.6.</span> <span class="nav-text">Windows Server 2008</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Office-2019"><span class="nav-number">4.3.7.</span> <span class="nav-text">Office 2019</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Office-2016"><span class="nav-number">4.3.8.</span> <span class="nav-text">Office 2016</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Office-2013"><span class="nav-number">4.3.9.</span> <span class="nav-text">Office 2013</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Office-2010"><span class="nav-number">4.3.10.</span> <span class="nav-text">Office 2010</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">  <a href="http://www.beian.miit.gov.cn" rel="noopener" target="_blank">冀ICP备15007634 </a>&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyril Xu</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

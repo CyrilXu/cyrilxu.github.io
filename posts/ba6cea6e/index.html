@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"未找到任何关于 ${query} 的结果","hits_stats":"${time}ms 内共找到 ${hits} 条结果"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文介绍model的options选项">
+<meta name="keywords" content="sequelize,数据库,ORM,Nodejs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sequelize中model的配置:model definition">
+<meta property="og:url" content="http://www.cyrilxu.cn/posts/ba6cea6e/index.html">
+<meta property="og:site_name" content="Cyril&#39;s Blog">
+<meta property="og:description" content="本文介绍model的options选项">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-18T15:28:18.263Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sequelize中model的配置:model definition">
+<meta name="twitter:description" content="本文介绍model的options选项">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Cyril's Blog" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://www.cyrilxu.cn/posts/ba6cea6e/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>sequelize中model的配置:model definition | Cyril's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyril's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">关于明天的事，我们后天就知道了</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.cyrilxu.cn/posts/ba6cea6e/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Cyril Xu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyril's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">sequelize中model的配置:model definition
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-03 23:13:01" itemprop="dateCreated datePublished" datetime="2019-07-03T23:13:01+08:00">2019-07-03</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Nodejs/" itemprop="url" rel="index"><span itemprop="name">Nodejs</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文介绍model的options选项</p>
+<a id="more"></a>
+
+<h1 id="model的一个例子"><a href="#model的一个例子" class="headerlink" title="model的一个例子"></a>model的一个例子</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">Foo.init(&#123;</span><br><span class="line"> <span class="comment">// 不许为空，默认值为true</span></span><br><span class="line"> flag: &#123; <span class="attr">type</span>: Sequelize.BOOLEAN, <span class="attr">allowNull</span>: <span class="literal">false</span>, <span class="attr">defaultValue</span>: <span class="literal">true</span> &#125;,</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 默认值为当前时间</span></span><br><span class="line"> myDate: &#123; <span class="attr">type</span>: Sequelize.DATE, <span class="attr">defaultValue</span>: Sequelize.NOW &#125;,</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 设置成不许为空，执行插入操作的时候如果是值null，DB将会抛出异常。</span></span><br><span class="line"> <span class="comment">// 如果想在插入操作前检查是否为空，参照下面的验证一节</span></span><br><span class="line"> title: &#123; <span class="attr">type</span>: Sequelize.STRING, <span class="attr">allowNull</span>: <span class="literal">false</span> &#125;,</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 创建两个相同的值将抛出错误。唯一属性可以是boolean类型或字符串。</span></span><br><span class="line"> <span class="comment">// 如果在多个字段提供了相同的字符串，将创建一个复合唯一键。</span></span><br><span class="line"> uniqueOne: &#123; <span class="attr">type</span>: Sequelize.STRING,  <span class="attr">unique</span>: <span class="string">'compositeIndex'</span> &#125;,</span><br><span class="line"> uniqueTwo: &#123; <span class="attr">type</span>: Sequelize.INTEGER, <span class="attr">unique</span>: <span class="string">'compositeIndex'</span> &#125;,</span><br><span class="line"></span><br><span class="line"> <span class="comment">// unique属性可以简单快速的创建一个唯一约束</span></span><br><span class="line"> someUnique: &#123; <span class="attr">type</span>: Sequelize.STRING, <span class="attr">unique</span>: <span class="literal">true</span> &#125;,</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 下面的方法跟直接创建是一样的</span></span><br><span class="line"> &#123; <span class="attr">someUnique</span>: &#123; <span class="attr">type</span>: Sequelize.STRING &#125; &#125;,</span><br><span class="line"> &#123; <span class="attr">indexes</span>: [ &#123; <span class="attr">unique</span>: <span class="literal">true</span>, <span class="attr">fields</span>: [ <span class="string">'someUnique'</span> ] &#125; ] &#125;,</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 主键</span></span><br><span class="line"> identifier: &#123; <span class="attr">type</span>: Sequelize.STRING, <span class="attr">primaryKey</span>: <span class="literal">true</span> &#125;,</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 自增</span></span><br><span class="line"> incrementMe: &#123; <span class="attr">type</span>: Sequelize.INTEGER, <span class="attr">autoIncrement</span>: <span class="literal">true</span> &#125;,</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 通过field属性指定DB中的列</span></span><br><span class="line"> fieldWithUnderscores: &#123; <span class="attr">type</span>: Sequelize.STRING, <span class="attr">field</span>: <span class="string">'field_with_underscores'</span> &#125;,</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 创建外键</span></span><br><span class="line"> bar_id: &#123;</span><br><span class="line">   type: Sequelize.INTEGER,</span><br><span class="line"></span><br><span class="line">   references: &#123;</span><br><span class="line">     <span class="comment">// 另一个model的引用</span></span><br><span class="line">     model: Bar,</span><br><span class="line"></span><br><span class="line">     <span class="comment">// 另一个model引用的列名</span></span><br><span class="line">     key: <span class="string">'id'</span>,</span><br><span class="line"></span><br><span class="line">     <span class="comment">// 指定何时检查外键约束 PostgreSQL only.</span></span><br><span class="line">     deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;,</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 加列注释 for MySQL, PostgreSQL and MSSQL only</span></span><br><span class="line"> commentMe: &#123;</span><br><span class="line">   type: Sequelize.INTEGER,</span><br><span class="line"></span><br><span class="line">   comment: <span class="string">'This is a column name that has a comment'</span></span><br><span class="line"> &#125;</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  sequelize,</span><br><span class="line">  modelName: <span class="string">'foo'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h1 id="时间戳（timestamps）"><a href="#时间戳（timestamps）" class="headerlink" title="时间戳（timestamps）"></a>时间戳（timestamps）</h1><p>默认情况下自动创建<code>createdAt</code>和<code>updatedAt</code></p>
+<p>详见下面的配置。</p>
+<h1 id="Getter-amp-Setter"><a href="#Getter-amp-Setter" class="headerlink" title="Getter &amp; Setter"></a>Getter &amp; Setter</h1><p>可以有两种方法定义<code>getter</code>&amp;<code>setter</code>:</p>
+<ul>
+<li>属性的定义中</li>
+<li>model的options中</li>
+</ul>
+<p><strong>如果两个地方都定义了，则属性中的优先</strong></p>
+<h2 id="属性定义："><a href="#属性定义：" class="headerlink" title="属性定义："></a>属性定义：</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">Employee.init(&#123;</span><br><span class="line">  name: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    allowNull: <span class="literal">false</span>,</span><br><span class="line">    <span class="keyword">get</span>() &#123;</span><br><span class="line">      <span class="keyword">const</span> title = <span class="keyword">this</span>.getDataValue(<span class="string">'title'</span>);</span><br><span class="line">      <span class="comment">// 'this' allows you to access attributes of the instance</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.getDataValue(<span class="string">'name'</span>) + <span class="string">' ('</span> + title + <span class="string">')'</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  title: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    allowNull: <span class="literal">false</span>,</span><br><span class="line">    <span class="keyword">set</span>(val) &#123;</span><br><span class="line">      <span class="keyword">this</span>.setDataValue(<span class="string">'title'</span>, val.toUpperCase());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, &#123; sequelize, <span class="attr">modelName</span>: <span class="string">'employee'</span> &#125;);</span><br><span class="line"></span><br><span class="line">Employee</span><br><span class="line">  .create(&#123; <span class="attr">name</span>: <span class="string">'John Doe'</span>, <span class="attr">title</span>: <span class="string">'senior engineer'</span> &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">employee</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(employee.get(<span class="string">'name'</span>)); <span class="comment">// John Doe (SENIOR ENGINEER)</span></span><br><span class="line">    <span class="built_in">console</span>.log(employee.get(<span class="string">'title'</span>)); <span class="comment">// SENIOR ENGINEER</span></span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="model的options中定义："><a href="#model的options中定义：" class="headerlink" title="model的options中定义："></a>model的options中定义：</h2><p>下面是在model的options中定义<code>getter</code>&amp;<code>setter</code>的例子</p>
+<p><code>fullName</code> getter是一个你如何定义数据库中并不存在的列的虚假属性（pseudo properties）的例子。事实上，虚假属性可以在两个地方定义：model getters和virtual datatype。virtual datatype可以有验证，而虚拟属性不行。注意在<code>fullName</code>的getter方法中引用的<code>this.firstname</code>和 <code>this.lastname</code>将会触发各自的getter方法。如果你不想触发，可以使用<code>getDataValue()</code>方法来获取原始值：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;</span><br><span class="line">  <span class="keyword">get</span> fullName() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.firstname + <span class="string">' '</span> + <span class="keyword">this</span>.lastname;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">set</span> fullName(value) &#123;</span><br><span class="line">    <span class="keyword">const</span> names = value.split(<span class="string">' '</span>);</span><br><span class="line">    <span class="keyword">this</span>.setDataValue(<span class="string">'firstname'</span>, names.slice(<span class="number">0</span>, <span class="number">-1</span>).join(<span class="string">' '</span>));</span><br><span class="line">    <span class="keyword">this</span>.setDataValue(<span class="string">'lastname'</span>, names.slice(<span class="number">-1</span>).join(<span class="string">' '</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Foo.init(&#123;</span><br><span class="line">  firstname: Sequelize.STRING,</span><br><span class="line">  lastname: Sequelize.STRING</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  sequelize,</span><br><span class="line">  modelName: <span class="string">'foo'</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Or with `sequelize.define`</span></span><br><span class="line">sequelize.define(<span class="string">'Foo'</span>, &#123;</span><br><span class="line">  firstname: Sequelize.STRING,</span><br><span class="line">  lastname: Sequelize.STRING</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  getterMethods: &#123;</span><br><span class="line">    fullName() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.firstname + <span class="string">' '</span> + <span class="keyword">this</span>.lastname;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  setterMethods: &#123;</span><br><span class="line">    fullName(value) &#123;</span><br><span class="line">      <span class="keyword">const</span> names = value.split(<span class="string">' '</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.setDataValue(<span class="string">'firstname'</span>, names.slice(<span class="number">0</span>, <span class="number">-1</span>).join(<span class="string">' '</span>));</span><br><span class="line">      <span class="keyword">this</span>.setDataValue(<span class="string">'lastname'</span>, names.slice(<span class="number">-1</span>).join(<span class="string">' '</span>));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h1 id="验证（validation）"><a href="#验证（validation）" class="headerlink" title="验证（validation）"></a>验证（validation）</h1><p>Model validations允许为每一个attribute指定格式/内容/继承验证。</p>
+<p>Validations会在 <code>create</code>, <code>update</code> 和 <code>save</code>时自动触发，也可以在一个实例里手动调用<code>validate()</code>触发</p>
+<h2 id="属性验证器"><a href="#属性验证器" class="headerlink" title="属性验证器"></a>属性验证器</h2><p>可以自定义验证器或者使用<a href="https://github.com/chriso/validator.js" target="_blank" rel="noopener">validator.js</a>内建的一些验证器</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ValidateMe</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">ValidateMe.init(&#123;</span><br><span class="line">  bar: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    validate: &#123;</span><br><span class="line">      is: [<span class="string">"^[a-z]+$"</span>,<span class="string">'i'</span>],     <span class="comment">// will only allow letters</span></span><br><span class="line">      is: <span class="regexp">/^[a-z]+$/i</span>,          <span class="comment">// same as the previous example using real RegExp</span></span><br><span class="line">      not: [<span class="string">"[a-z]"</span>,<span class="string">'i'</span>],       <span class="comment">// will not allow letters</span></span><br><span class="line">      isEmail: <span class="literal">true</span>,            <span class="comment">// checks for email format (foo@bar.com)</span></span><br><span class="line">      isUrl: <span class="literal">true</span>,              <span class="comment">// checks for url format (http://foo.com)</span></span><br><span class="line">      isIP: <span class="literal">true</span>,               <span class="comment">// checks for IPv4 (129.89.23.1) or IPv6 format</span></span><br><span class="line">      isIPv4: <span class="literal">true</span>,             <span class="comment">// checks for IPv4 (129.89.23.1)</span></span><br><span class="line">      isIPv6: <span class="literal">true</span>,             <span class="comment">// checks for IPv6 format</span></span><br><span class="line">      isAlpha: <span class="literal">true</span>,            <span class="comment">// will only allow letters</span></span><br><span class="line">      isAlphanumeric: <span class="literal">true</span>,     <span class="comment">// will only allow alphanumeric characters, so "_abc" will fail</span></span><br><span class="line">      isNumeric: <span class="literal">true</span>,          <span class="comment">// will only allow numbers</span></span><br><span class="line">      isInt: <span class="literal">true</span>,              <span class="comment">// checks for valid integers</span></span><br><span class="line">      isFloat: <span class="literal">true</span>,            <span class="comment">// checks for valid floating point numbers</span></span><br><span class="line">      isDecimal: <span class="literal">true</span>,          <span class="comment">// checks for any numbers</span></span><br><span class="line">      isLowercase: <span class="literal">true</span>,        <span class="comment">// checks for lowercase</span></span><br><span class="line">      isUppercase: <span class="literal">true</span>,        <span class="comment">// checks for uppercase</span></span><br><span class="line">      notNull: <span class="literal">true</span>,            <span class="comment">// won't allow null</span></span><br><span class="line">      isNull: <span class="literal">true</span>,             <span class="comment">// only allows null</span></span><br><span class="line">      notEmpty: <span class="literal">true</span>,           <span class="comment">// don't allow empty strings</span></span><br><span class="line">      equals: <span class="string">'specific value'</span>, <span class="comment">// only allow a specific value</span></span><br><span class="line">      contains: <span class="string">'foo'</span>,          <span class="comment">// force specific substrings</span></span><br><span class="line">      notIn: [[<span class="string">'foo'</span>, <span class="string">'bar'</span>]],  <span class="comment">// check the value is not one of these</span></span><br><span class="line">      isIn: [[<span class="string">'foo'</span>, <span class="string">'bar'</span>]],   <span class="comment">// check the value is one of these</span></span><br><span class="line">      notContains: <span class="string">'bar'</span>,       <span class="comment">// don't allow specific substrings</span></span><br><span class="line">      len: [<span class="number">2</span>,<span class="number">10</span>],              <span class="comment">// only allow values with length between 2 and 10</span></span><br><span class="line">      isUUID: <span class="number">4</span>,                <span class="comment">// only allow uuids</span></span><br><span class="line">      isDate: <span class="literal">true</span>,             <span class="comment">// only allow date strings</span></span><br><span class="line">      isAfter: <span class="string">"2011-11-05"</span>,    <span class="comment">// only allow date strings after a specific date</span></span><br><span class="line">      isBefore: <span class="string">"2011-11-05"</span>,   <span class="comment">// only allow date strings before a specific date</span></span><br><span class="line">      max: <span class="number">23</span>,                  <span class="comment">// only allow values &lt;= 23</span></span><br><span class="line">      min: <span class="number">23</span>,                  <span class="comment">// only allow values &gt;= 23</span></span><br><span class="line">      isCreditCard: <span class="literal">true</span>,       <span class="comment">// check for valid credit card numbers</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">// Examples of custom validators:</span></span><br><span class="line">      isEven(value) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">parseInt</span>(value) % <span class="number">2</span> !== <span class="number">0</span>) &#123;</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Only even values are allowed!'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      isGreaterThanOtherField(value) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">parseInt</span>(value) &lt;= <span class="built_in">parseInt</span>(<span class="keyword">this</span>.otherField)) &#123;</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Bar must be greater than otherField.'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, &#123; sequelize &#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>验证函数有些地方需要传入多个参数，传入的参数必须是数组。但是如果要传入一个<code>数组参数</code>，例如 <code>isIn</code>， 将会被解释成多个字符串参数而不是一个数组参数。解决方法是传入一个单一长度的数组，就像上面例子中的 <code>[[&#39;one&#39;, &#39;two&#39;]]</code> 。</p>
+<p>用自定义错误信息代替 <a href="https://github.com/chriso/validator.js" target="_blank" rel="noopener">validator.js</a>中提供的默认信息，需要使用一个对象而不是纯值或参数数组。例如不需要参数的验证器可以设置如下自定义信息：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">isInt: &#123;</span><br><span class="line">  msg: <span class="string">"Must be an integer number of pennies"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>或者如果需要参数，可以加上 <code>args</code> 属性：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">isIn: &#123;</span><br><span class="line">  args: [[<span class="string">'en'</span>, <span class="string">'zh'</span>]],</span><br><span class="line">  msg: <span class="string">"Must be English or Chinese"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当使用自定义验证器函数时，错误消息将是抛出的 <code>Error</code> 对象所持有的任何消息。</p>
+<p>有关内置验证方法的更多详细信息，请参阅 <a href="https://github.com/chriso/validator.js" target="_blank" rel="noopener">validator.js project</a> .</p>
+<p>*<em>提示: *</em>你还可以为日志记录部分定义自定义函数. 只是传递一个方法. 第一个参数将是记录的字符串.</p>
+<h3 id="属性验证器-与-allowNull"><a href="#属性验证器-与-allowNull" class="headerlink" title="属性验证器 与 allowNull"></a>属性验证器 与 <code>allowNull</code></h3><p>如果模型的特定字段设置为不允许为空(使用<code>allowNull:false</code>)并且该值已经被设置为 <code>null</code>，则所有的验证器都将跳过并抛出 <code>ValidationError</code>异常。</p>
+<p>另一方面，如果设置为允许为空(使用 <code>allowNull:true</code>)并且该值已经被设置为 <code>null</code>，则只会跳过内置验证器，而自定义验证器仍将执行。</p>
+<p>这意味着可以使用一个字符串字段来验证其长度在5到10个字符之间，但也允许为 <code>null</code>(因为当值为 <code>null</code> 时，将自动跳过长度验证器):</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">User.init(&#123;</span><br><span class="line">  username: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    allowNull: <span class="literal">true</span>,</span><br><span class="line">    validate: &#123;</span><br><span class="line">      len: [<span class="number">5</span>, <span class="number">10</span>]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, &#123; sequelize &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>你也能利用自定义验证器有条件的允许 <code>null</code> 值，因为它不会被跳过：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">User.init(&#123;</span><br><span class="line">  age: Sequelize.INTEGER,</span><br><span class="line">  name: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    allowNull: <span class="literal">true</span>,</span><br><span class="line">    validate: &#123;</span><br><span class="line">      customValidator(value) &#123;</span><br><span class="line">        <span class="keyword">if</span> (value === <span class="literal">null</span> &amp;&amp; <span class="keyword">this</span>.age !== <span class="number">10</span>) &#123;</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"name can't be null unless age is 10"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, &#123; sequelize &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>通过设置 <code>notNull</code> 验证器，你能自定义 <code>allowNull</code> 的错误信息：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">User.init(&#123;</span><br><span class="line">  name: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    allowNull: <span class="literal">false</span>,</span><br><span class="line">    validate: &#123;</span><br><span class="line">      notNull: &#123;</span><br><span class="line">        msg: <span class="string">'Please enter your name'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, &#123; sequelize &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="模型范围验证"><a href="#模型范围验证" class="headerlink" title="模型范围验证"></a>模型范围验证</h3><p>验证器也可以在特定字段验证器之后用来定义检查模型。例如，你可以确保<code>纬度</code>和<code>经度</code>都不设置，或者两者都设置。如果设置了一个而另一个未设置则验证失败。</p>
+<p>模型验证器方法与模型对象的上下文一起调用，如果它们抛出错误，则认为失败，否则认为通过。这与自定义字段特定的验证器是一样的。</p>
+<p>所收集的任何错误消息都将与验证结果对象一起放在字段验证错误中。这个错误使用在<code>validate</code>参数对象中以失败的验证方法的键来命名。即便在任何一个时刻，每个模型验证方法只能有一个错误消息，它会在数组中显示为单个字符串错误。以最大化与字段错误的一致性。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pub</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">Pub.init(&#123;</span><br><span class="line">  name: &#123; <span class="attr">type</span>: Sequelize.STRING &#125;,</span><br><span class="line">  address: &#123; <span class="attr">type</span>: Sequelize.STRING &#125;,</span><br><span class="line">  latitude: &#123;</span><br><span class="line">    type: Sequelize.INTEGER,</span><br><span class="line">    allowNull: <span class="literal">true</span>,</span><br><span class="line">    defaultValue: <span class="literal">null</span>,</span><br><span class="line">    validate: &#123; <span class="attr">min</span>: <span class="number">-90</span>, <span class="attr">max</span>: <span class="number">90</span> &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  longitude: &#123;</span><br><span class="line">    type: Sequelize.INTEGER,</span><br><span class="line">    allowNull: <span class="literal">true</span>,</span><br><span class="line">    defaultValue: <span class="literal">null</span>,</span><br><span class="line">    validate: &#123; <span class="attr">min</span>: <span class="number">-180</span>, <span class="attr">max</span>: <span class="number">180</span> &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  validate: &#123;</span><br><span class="line">    bothCoordsOrNone() &#123;</span><br><span class="line">      <span class="keyword">if</span> ((<span class="keyword">this</span>.latitude === <span class="literal">null</span>) !== (<span class="keyword">this</span>.longitude === <span class="literal">null</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Require either both latitude and longitude or neither'</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  sequelize,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>在这种简单情况下，如果给定纬度或经度,而不是同时包含两者，则验证失败。 如果我们尝试构建一个超范围的纬度和经度，那么<code>raging_bullock_arms.validate()</code>可能会返回</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">'latitude'</span>: [<span class="string">'Invalid number: latitude'</span>],</span><br><span class="line">  <span class="string">'bothCoordsOrNone'</span>: [<span class="string">'Require either both latitude and longitude or neither'</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样的验证也可以通过在单个属性上定义的自定义验证器(例如<code>latitude</code>属性，通过检查<code>(value === null) !== (this.longitude === null)</code>)来完成，但模型范围的验证方法更清晰.</p>
+<h1 id="配置-configuration"><a href="#配置-configuration" class="headerlink" title="配置(configuration)"></a>配置(configuration)</h1><p>你可以通过Sequelize handles影响列名：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">Bar.init(&#123; <span class="comment">/* bla */</span> &#125;, &#123;</span><br><span class="line">  <span class="comment">// model名. 在`sequelize.models`下面用这个名字存储此model</span></span><br><span class="line">  <span class="comment">// 默认类名，如在这个例子中是Bar。控制自动生成的外键和联合查询的名字</span></span><br><span class="line">  modelName: <span class="string">'bar'</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 不自动添加timestamp属性(updatedAt, createdAt)</span></span><br><span class="line">  timestamps: <span class="literal">false</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 不删除数据库记录，而是设置一个删除属性deletedAt到当前数据（当删除完毕时）</span></span><br><span class="line">  <span class="comment">// paranoid只有在timestamps启用时才起作用</span></span><br><span class="line">  paranoid: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 自动设置下划线.</span></span><br><span class="line">  <span class="comment">// 字段如果已经设置了则不会重写</span></span><br><span class="line">  underscored: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 不会自动在表名加上s</span></span><br><span class="line">  freezeTableName: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 定义数据库表名</span></span><br><span class="line">  tableName: <span class="string">'my_very_custom_table_name'</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用乐观锁.</span></span><br><span class="line">  <span class="comment">// 启用时，sequelize将增加一个version count属性到model上，</span></span><br><span class="line">  <span class="comment">// 并且当脏读保存时，会抛出OptimisticLockingError错误</span></span><br><span class="line">  <span class="comment">// 当你想启用时，设置成true或者一个属性名字符串。</span></span><br><span class="line">  version: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Sequelize实例</span></span><br><span class="line">  sequelize,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>当你想使用timestamps，但是只想使用一部分，或者使用另外的名字时：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">Foo.init(&#123; <span class="comment">/* bla */</span> &#125;, &#123;</span><br><span class="line">  <span class="comment">// 不要忘了启用timestamps!</span></span><br><span class="line">  timestamps: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 不启用createdAt</span></span><br><span class="line">  createdAt: <span class="literal">false</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// updatedAt的字段名是updateTimestamp</span></span><br><span class="line">  updatedAt: <span class="string">'updateTimestamp'</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// deletedAt字段名是destroyTime (启用paranoid才能生效)</span></span><br><span class="line">  deletedAt: <span class="string">'destroyTime'</span>,</span><br><span class="line">  paranoid: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">  sequelize,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>你也能更改数据库engine，比如MyISAM。默认值是InnoDB</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">Person.init(&#123; <span class="comment">/* attributes */</span> &#125;, &#123;</span><br><span class="line">  engine: <span class="string">'MYISAM'</span>,</span><br><span class="line">  sequelize</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// or globally</span></span><br><span class="line"><span class="keyword">const</span> sequelize = <span class="keyword">new</span> Sequelize(db, user, pw, &#123;</span><br><span class="line">  define: &#123; <span class="attr">engine</span>: <span class="string">'MYISAM'</span> &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>最后，你可以在MySQL和PG中给表增加注释</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">Person.init(&#123; <span class="comment">/* attributes */</span> &#125;, &#123;</span><br><span class="line">  comment: <span class="string">"I'm a table comment!"</span>,</span><br><span class="line">  sequelize</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h1 id="乐观锁-Optimistic-Locking"><a href="#乐观锁-Optimistic-Locking" class="headerlink" title="乐观锁(Optimistic Locking)"></a>乐观锁(Optimistic Locking)</h1><p>Sequelize通过version原生支持乐观锁。默认是不启用的，可以通过设置version启用</p>
+<p>乐观锁允许并发修改操作并且防止overwriting data冲突。当检测到冲突时，会抛出OptimisticLockError错误</p>
+<h1 id="数据库同步"><a href="#数据库同步" class="headerlink" title="数据库同步"></a>数据库同步</h1><p>当开始一个新的项目时，你还不会有一个数据库结构,并且使用Sequelize你也不需要它。只需指定你的模型结构，并让库完成其余操作。目前支持的是创建和删除表:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create the tables:</span></span><br><span class="line">Project.sync()</span><br><span class="line">Task.sync()</span><br><span class="line"></span><br><span class="line"><span class="comment">// Force the creation!</span></span><br><span class="line">Project.sync(&#123;<span class="attr">force</span>: <span class="literal">true</span>&#125;) <span class="comment">// this will drop the table first and re-create it afterwards</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// drop the tables:</span></span><br><span class="line">Project.drop()</span><br><span class="line">Task.drop()</span><br><span class="line"></span><br><span class="line"><span class="comment">// event handling:</span></span><br><span class="line">Project.[sync|drop]().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ok ... everything is nice!</span></span><br><span class="line">&#125;).catch(<span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// oooh, did you enter wrong database credentials?</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>因为同步和删除所有的表可能要写很多行，你也可以让Sequelize来为做这些：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Sync all models that aren't already in the database</span></span><br><span class="line">sequelize.sync()</span><br><span class="line"></span><br><span class="line"><span class="comment">// Force sync all models</span></span><br><span class="line">sequelize.sync(&#123;<span class="attr">force</span>: <span class="literal">true</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Drop all tables</span></span><br><span class="line">sequelize.drop()</span><br><span class="line"></span><br><span class="line"><span class="comment">// emit handling:</span></span><br><span class="line">sequelize.[sync|drop]().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// woot woot</span></span><br><span class="line">&#125;).catch(<span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// whooops</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>因为<code>.sync({ force: true })</code>是具有破坏性的操作，可以使用<code>match</code>参数作为附加的安全检查。</p>
+<p><code>match</code>参数可以通知Sequelize，以便在同步之前匹配正则表达式与数据库名称 - 在测试中使用<code>force:true</code>但不使用实时代码的情况下的安全检查。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// This will run .sync() only if database name ends with '_test'</span></span><br><span class="line">sequelize.sync(&#123; <span class="attr">force</span>: <span class="literal">true</span>, <span class="attr">match</span>: <span class="regexp">/_test$/</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<h1 id="扩展model"><a href="#扩展model" class="headerlink" title="扩展model"></a>扩展model</h1><p>Sequelize 模型是ES6类。你可以轻松添加自定义实例或类级别的方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Adding a class level method</span></span><br><span class="line">  <span class="keyword">static</span> classLevelMethod() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'foo'</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Adding an instance level method</span></span><br><span class="line">  instanceLevelMethod() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'bar'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">User.init(&#123; <span class="attr">firstname</span>: Sequelize.STRING &#125;, &#123; sequelize &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>当然，你还可以访问实例的数据并生成虚拟的getter：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;</span><br><span class="line">  getFullname() &#123;</span><br><span class="line">    <span class="keyword">return</span> [<span class="keyword">this</span>.firstname, <span class="keyword">this</span>.lastname].join(<span class="string">' '</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">User.init(&#123; <span class="attr">firstname</span>: Sequelize.STRING, <span class="attr">lastname</span>: Sequelize.STRING &#125;, &#123; sequelize &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Example:</span></span><br><span class="line">User.build(&#123; <span class="attr">firstname</span>: <span class="string">'foo'</span>, <span class="attr">lastname</span>: <span class="string">'bar'</span> &#125;).getFullname() <span class="comment">// 'foo bar'</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>在<code>Model.sync()</code>或者<code>sequelize.sync</code>同步时，可以增加索引到模型定义中</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;&#125;</span><br><span class="line">User.init(&#123;&#125;, &#123;</span><br><span class="line">  indexes: [</span><br><span class="line">    <span class="comment">// Create a unique index on email</span></span><br><span class="line">    &#123;</span><br><span class="line">      unique: <span class="literal">true</span>,</span><br><span class="line">      fields: [<span class="string">'email'</span>]</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Creates a gin index on data with the jsonb_path_ops operator</span></span><br><span class="line">    &#123;</span><br><span class="line">      fields: [<span class="string">'data'</span>],</span><br><span class="line">      using: <span class="string">'gin'</span>,</span><br><span class="line">      operator: <span class="string">'jsonb_path_ops'</span></span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// By default index name will be [table]_[fields]</span></span><br><span class="line">    <span class="comment">// Creates a multi column partial index</span></span><br><span class="line">    &#123;</span><br><span class="line">      name: <span class="string">'public_by_author'</span>,</span><br><span class="line">      fields: [<span class="string">'author'</span>, <span class="string">'status'</span>],</span><br><span class="line">      where: &#123;</span><br><span class="line">        status: <span class="string">'public'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// A BTREE index with a ordered field</span></span><br><span class="line">    &#123;</span><br><span class="line">      name: <span class="string">'title_index'</span>,</span><br><span class="line">      using: <span class="string">'BTREE'</span>,</span><br><span class="line">      fields: [<span class="string">'author'</span>, &#123;<span class="attr">attribute</span>: <span class="string">'title'</span>, <span class="attr">collate</span>: <span class="string">'en_US'</span>, <span class="attr">order</span>: <span class="string">'DESC'</span>, <span class="attr">length</span>: <span class="number">5</span>&#125;]</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  sequelize</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sequelize/" rel="tag"># sequelize</a>
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/ORM/" rel="tag"># ORM</a>
+          
+            <a href="/tags/Nodejs/" rel="tag"># Nodejs</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/79706a60/" rel="next" title="nodejs使用sequelize操作数据库">
+                <i class="fa fa-chevron-left"></i> nodejs使用sequelize操作数据库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/21f4d5f9/" rel="prev" title="sequelize的基本操作">
+                sequelize的基本操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Cyril Xu">
+            
+              <p class="site-author-name" itemprop="name">Cyril Xu</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#model的一个例子"><span class="nav-number">1.</span> <span class="nav-text">model的一个例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#时间戳（timestamps）"><span class="nav-number">2.</span> <span class="nav-text">时间戳（timestamps）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Getter-amp-Setter"><span class="nav-number">3.</span> <span class="nav-text">Getter &amp; Setter</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#属性定义："><span class="nav-number">3.1.</span> <span class="nav-text">属性定义：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#model的options中定义："><span class="nav-number">3.2.</span> <span class="nav-text">model的options中定义：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#验证（validation）"><span class="nav-number">4.</span> <span class="nav-text">验证（validation）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#属性验证器"><span class="nav-number">4.1.</span> <span class="nav-text">属性验证器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性验证器-与-allowNull"><span class="nav-number">4.1.1.</span> <span class="nav-text">属性验证器 与 allowNull</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型范围验证"><span class="nav-number">4.1.2.</span> <span class="nav-text">模型范围验证</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置-configuration"><span class="nav-number">5.</span> <span class="nav-text">配置(configuration)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#乐观锁-Optimistic-Locking"><span class="nav-number">6.</span> <span class="nav-text">乐观锁(Optimistic Locking)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库同步"><span class="nav-number">7.</span> <span class="nav-text">数据库同步</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#扩展model"><span class="nav-number">8.</span> <span class="nav-text">扩展model</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">8.1.</span> <span class="nav-text">索引</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">  <a href="http://www.beian.miit.gov.cn" rel="noopener" target="_blank">冀ICP备15007634 </a>&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyril Xu</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

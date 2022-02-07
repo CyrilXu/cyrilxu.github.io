@@ -39,32 +39,6 @@
   </entry>
   
   <entry>
-    <title>写在一周年</title>
-    <link href="http://www.cyrilxu.cn/posts/27dd4a58/"/>
-    <id>http://www.cyrilxu.cn/posts/27dd4a58/</id>
-    <published>2020-08-27T07:13:35.000Z</published>
-    <updated>2020-08-27T07:43:03.180Z</updated>
-    
-    <content type="html"><![CDATA[<p>自从写完上一篇blog已经过去一年零一个月零一十一天，尽管归纳总结了一些知识，但是这一年多时间里却什么都没写，之前做出的规划早已荡然无存。如今，震天的战鼓再一次响起……</p><a id="more"></a><p>嗯……为什么这一年来什么都没写呢？第一篇说了，之所以要搭建这个blog，是因为当时失业了，准备把之前学到的知识做一个总结。总结了正好三个月，戛然而止。原因呢，有两个。第一就是7月份上班了。第二个呢，就是去年的今天wow怀旧服开服了。嗯……所以这个一周年是在纪念wow怀旧服。</p><p>玩了一年，15年前的一些遗憾弥补了大半了，也是时候回来写点东西了。</p><p>写点什么呢？出了填之前挖的坑，还是要写点新东西的。那就把最近一年来工作上做的一些工作总结一下吧。再挖坑：</p><ul><li>内网开发环境怎么搭建npm镜像服务器</li><li>渗透性测试及CTF</li></ul><p>暂时先挖两个坑吧</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;自从写完上一篇blog已经过去一年零一个月零一十一天，尽管归纳总结了一些知识，但是这一年多时间里却什么都没写，之前做出的规划早已荡然无存。如今，震天的战鼓再一次响起……&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="计划" scheme="http://www.cyrilxu.cn/categories/%E8%AE%A1%E5%88%92/"/>
-    
-    
-      <category term="blog" scheme="http://www.cyrilxu.cn/tags/blog/"/>
-    
-      <category term="计划" scheme="http://www.cyrilxu.cn/tags/%E8%AE%A1%E5%88%92/"/>
-    
-      <category term="贪玩" scheme="http://www.cyrilxu.cn/tags/%E8%B4%AA%E7%8E%A9/"/>
-    
-  </entry>
-  
-  <entry>
     <title>在Ubuntu中搭建KMS服务器</title>
     <link href="http://www.cyrilxu.cn/posts/2aaa4e0b/"/>
     <id>http://www.cyrilxu.cn/posts/2aaa4e0b/</id>
@@ -111,13 +85,13 @@
       <category term="Nodejs" scheme="http://www.cyrilxu.cn/categories/Nodejs/"/>
     
     
+      <category term="Nodejs" scheme="http://www.cyrilxu.cn/tags/Nodejs/"/>
+    
       <category term="sequelize" scheme="http://www.cyrilxu.cn/tags/sequelize/"/>
     
       <category term="数据库" scheme="http://www.cyrilxu.cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
       <category term="ORM" scheme="http://www.cyrilxu.cn/tags/ORM/"/>
-    
-      <category term="Nodejs" scheme="http://www.cyrilxu.cn/tags/Nodejs/"/>
     
   </entry>
   
@@ -139,13 +113,13 @@
       <category term="Nodejs" scheme="http://www.cyrilxu.cn/categories/Nodejs/"/>
     
     
+      <category term="Nodejs" scheme="http://www.cyrilxu.cn/tags/Nodejs/"/>
+    
       <category term="sequelize" scheme="http://www.cyrilxu.cn/tags/sequelize/"/>
     
       <category term="数据库" scheme="http://www.cyrilxu.cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
       <category term="ORM" scheme="http://www.cyrilxu.cn/tags/ORM/"/>
-    
-      <category term="Nodejs" scheme="http://www.cyrilxu.cn/tags/Nodejs/"/>
     
   </entry>
   

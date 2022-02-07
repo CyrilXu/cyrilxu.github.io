@@ -85,13 +85,13 @@
       <category term="Nodejs" scheme="http://www.cyrilxu.cn/categories/Nodejs/"/>
     
     
-      <category term="Nodejs" scheme="http://www.cyrilxu.cn/tags/Nodejs/"/>
-    
       <category term="sequelize" scheme="http://www.cyrilxu.cn/tags/sequelize/"/>
     
       <category term="数据库" scheme="http://www.cyrilxu.cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
       <category term="ORM" scheme="http://www.cyrilxu.cn/tags/ORM/"/>
+    
+      <category term="Nodejs" scheme="http://www.cyrilxu.cn/tags/Nodejs/"/>
     
   </entry>
   
@@ -113,13 +113,13 @@
       <category term="Nodejs" scheme="http://www.cyrilxu.cn/categories/Nodejs/"/>
     
     
-      <category term="Nodejs" scheme="http://www.cyrilxu.cn/tags/Nodejs/"/>
-    
       <category term="sequelize" scheme="http://www.cyrilxu.cn/tags/sequelize/"/>
     
       <category term="数据库" scheme="http://www.cyrilxu.cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
       <category term="ORM" scheme="http://www.cyrilxu.cn/tags/ORM/"/>
+    
+      <category term="Nodejs" scheme="http://www.cyrilxu.cn/tags/Nodejs/"/>
     
   </entry>
   
@@ -317,9 +317,9 @@
       <category term="blog" scheme="http://www.cyrilxu.cn/categories/blog/"/>
     
     
-      <category term="blog" scheme="http://www.cyrilxu.cn/tags/blog/"/>
-    
       <category term="hexo" scheme="http://www.cyrilxu.cn/tags/hexo/"/>
+    
+      <category term="blog" scheme="http://www.cyrilxu.cn/tags/blog/"/>
     
       <category term="NexT" scheme="http://www.cyrilxu.cn/tags/NexT/"/>
     
@@ -349,9 +349,9 @@
       <category term="blog" scheme="http://www.cyrilxu.cn/categories/blog/"/>
     
     
-      <category term="blog" scheme="http://www.cyrilxu.cn/tags/blog/"/>
-    
       <category term="hexo" scheme="http://www.cyrilxu.cn/tags/hexo/"/>
+    
+      <category term="blog" scheme="http://www.cyrilxu.cn/tags/blog/"/>
     
       <category term="NexT" scheme="http://www.cyrilxu.cn/tags/NexT/"/>
     

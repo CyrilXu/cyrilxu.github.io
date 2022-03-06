@@ -96,18 +96,17 @@
 
 
 
-  <meta name="description" content="敲代码这么多年了，之前的一些经验教训一直都是记在OneNote上，记录的比较杂乱，最近失业了，准备把一些新知识点和之前遇到的一些问题总结一下。 总结计划 GitHub Page 和 hexo nodejs docker db 分布式 贪玩 算法与数据结构  只是给自己看的，也许之后会修修改改的成为真正传播思想的博客吧">
-<meta name="keywords" content="计划">
+  <meta name="description" content="0. 前言和同事做网站，我负责后端代码开发。每次写完代码，都要打包上传到服务器，手动执行脚本，太累。我一直跟我的小兄弟们说，如果一件事情要做3遍以上，你就需要考虑自动化。今天弄个Jenkins做自动化部署，从繁重的手动操作中解放出来。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="自己搭建的第一篇blog">
-<meta property="og:url" content="http://yoursite.com/posts/18339/index.html">
+<meta property="og:title" content="安装Jenkins实现自动化部署">
+<meta property="og:url" content="http://yoursite.com/posts/fbe463ed/index.html">
 <meta property="og:site_name" content="Cyril&#39;s Blog">
-<meta property="og:description" content="敲代码这么多年了，之前的一些经验教训一直都是记在OneNote上，记录的比较杂乱，最近失业了，准备把一些新知识点和之前遇到的一些问题总结一下。 总结计划 GitHub Page 和 hexo nodejs docker db 分布式 贪玩 算法与数据结构  只是给自己看的，也许之后会修修改改的成为真正传播思想的博客吧">
+<meta property="og:description" content="0. 前言和同事做网站，我负责后端代码开发。每次写完代码，都要打包上传到服务器，手动执行脚本，太累。我一直跟我的小兄弟们说，如果一件事情要做3遍以上，你就需要考虑自动化。今天弄个Jenkins做自动化部署，从繁重的手动操作中解放出来。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-18T15:28:18.242Z">
+<meta property="og:updated_time" content="2022-03-06T19:25:36.885Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="自己搭建的第一篇blog">
-<meta name="twitter:description" content="敲代码这么多年了，之前的一些经验教训一直都是记在OneNote上，记录的比较杂乱，最近失业了，准备把一些新知识点和之前遇到的一些问题总结一下。 总结计划 GitHub Page 和 hexo nodejs docker db 分布式 贪玩 算法与数据结构  只是给自己看的，也许之后会修修改改的成为真正传播思想的博客吧">
+<meta name="twitter:title" content="安装Jenkins实现自动化部署">
+<meta name="twitter:description" content="0. 前言和同事做网站，我负责后端代码开发。每次写完代码，都要打包上传到服务器，手动执行脚本，太累。我一直跟我的小兄弟们说，如果一件事情要做3遍以上，你就需要考虑自动化。今天弄个Jenkins做自动化部署，从繁重的手动操作中解放出来。">
 
 
 
@@ -117,7 +116,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/posts/18339/">
+  <link rel="canonical" href="http://yoursite.com/posts/fbe463ed/">
 
 
 
@@ -127,7 +126,7 @@
   };
 </script>
 
-  <title>自己搭建的第一篇blog | Cyril's Blog</title>
+  <title>安装Jenkins实现自动化部署 | Cyril's Blog</title>
   
 
 
@@ -330,7 +329,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/18339/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/fbe463ed/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Cyril Xu">
@@ -347,7 +346,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">自己搭建的第一篇blog
+          <h1 class="post-title" itemprop="name headline">安装Jenkins实现自动化部署
 
               
             
@@ -373,30 +372,12 @@
                 
               
 
-              <time title="创建时间：2019-04-16 22:17:58" itemprop="dateCreated datePublished" datetime="2019-04-16T22:17:58+08:00">2019-04-16</time>
+              <time title="创建时间：2022-03-03 13:36:45" itemprop="dateCreated datePublished" datetime="2022-03-03T13:36:45+08:00">2022-03-03</time>
             
 
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计划/" itemprop="url" rel="index"><span itemprop="name">计划</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -426,17 +407,56 @@
       
 
       
-        <p>敲代码这么多年了，之前的一些经验教训一直都是记在OneNote上，记录的比较杂乱，最近失业了，准备把一些新知识点和之前遇到的一些问题总结一下。</p>
-<h2 id="总结计划"><a href="#总结计划" class="headerlink" title="总结计划"></a>总结计划</h2><ul>
-<li>GitHub Page 和 hexo</li>
-<li>nodejs</li>
-<li>docker</li>
-<li>db</li>
-<li>分布式</li>
-<li>贪玩</li>
-<li>算法与数据结构</li>
-</ul>
-<p>只是给自己看的，也许之后会修修改改的成为真正传播思想的博客吧</p>
+        <h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0. 前言"></a>0. 前言</h1><p>和同事做网站，我负责后端代码开发。每次写完代码，都要打包上传到服务器，手动执行脚本，太累。我一直跟我的小兄弟们说，如果一件事情要做3遍以上，你就需要考虑自动化。今天弄个Jenkins做自动化部署，从繁重的手动操作中解放出来。</p>
+<a id="more"></a>
+
+<h1 id="1-配置yum源并安装Jenkins"><a href="#1-配置yum源并安装Jenkins" class="headerlink" title="1. 配置yum源并安装Jenkins"></a>1. 配置yum源并安装Jenkins</h1><p>CentOS官方yum源未提供Jenkins ，需要配置yum.repo。</p>
+<h2 id="0-下载yum-repo文件"><a href="#0-下载yum-repo文件" class="headerlink" title="0. 下载yum.repo文件"></a>0. 下载yum.repo文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo</span><br></pre></td></tr></table></figure>
+
+<p>把<code>jenkins.repo</code>文件下载到<code>/etc/yum.repos.d/</code>目录下看到</p>
+<h2 id="1-导入公钥"><a href="#1-导入公钥" class="headerlink" title="1. 导入公钥"></a>1. 导入公钥</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm --import http://pkg.jenkins.io/redhat-stable/jenkins.io.key</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install jenkins</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-配置"><a href="#3-配置" class="headerlink" title="3. 配置"></a>3. 配置</h2><p>Jenkins工作目录为<code>/var/lib/jenkins/</code>，配置文件位于<code>/etc/sysconfig/jenkins</code></p>
+<p>Jenkins默认端口为8080，8080我已经使用了，所以改成其他端口，并在Nginx反向代理到该端口。</p>
+<p>Jenkins会使用<code>/usr/bin/java</code>作为默认Java安装位置，修改java所在位置为正确位置。</p>
+<h2 id="4-启动"><a href="#4-启动" class="headerlink" title="4. 启动"></a>4. 启动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service jenkins start</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：这里启动可能失败。我遇到的问题是配置文件里的修改没起作用。我把应用的8080改成其他端口了，并且建了一个软连接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /xxx/xxx/java /usr/bin/java</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-配置Jenkins工具、插件"><a href="#2-配置Jenkins工具、插件" class="headerlink" title="2. 配置Jenkins工具、插件"></a>2. 配置Jenkins工具、插件</h1><p>在浏览器打开Jenkins，需要输入<code>/var/lib/jenkins/secrets/initialAdminPassword</code>文件中的安全码，设置好用户名及插件</p>
+<p>在体统管理-&gt;全局工具配置中，根据实际目录配置java、maven、git等信息。</p>
+<p>因为要在构建成功后启动spring boot程序，还要安装<code>build post task</code>插件。</p>
+<h1 id="3-开始使用"><a href="#3-开始使用" class="headerlink" title="3. 开始使用"></a>3. 开始使用</h1><p>点击新建任务，输入任务名。因为只是为了实现自己简单的部署，选择第一个选项：构建软件项目。</p>
+<p>逐项开始设置：</p>
+<ol>
+<li><p>General</p>
+<p>我只选择了丢弃旧的构建，保留最多5个构建记录</p>
+</li>
+<li><p>源码管理</p>
+<p>选择Git，填入repository地址和响应的credential，选择对应的分支</p>
+</li>
+<li><p>构建触发器</p>
+<p>直接选轮询 <code>* * * * *</code>每分钟检测一次代码更新</p>
+</li>
+<li><p>构建环境</p>
+</li>
+<li><p>构建</p>
+<p>调用之前设置的maven配置，目标填clean package</p>
+</li>
+<li><p>构建后操作</p>
+<p>选择post build task，输入脚本执行cp和sh start.sh命令，勾选只有之前所有步骤全部成功时才执行</p>
+</li>
+</ol>
+<h1 id="4-坑"><a href="#4-坑" class="headerlink" title="4. 坑"></a>4. 坑</h1><ol>
+<li><p>权限问题。</p>
+<p>执行构建不成功，查看log发现下载依赖时出错。把maven本地仓库所有者改成了jenkins解决了</p>
+</li>
+<li><p>有些人遇到启动程序后被kill掉的问题，在执行脚本时修改BUILD_ID解决问题。我没遇到</p>
+</li>
+</ol>
 
       
     </div>
@@ -458,12 +478,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/计划/" rel="tag"># 计划</a>
-          
-        </div>
-      
 
       
       
@@ -473,15 +487,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/posts/c9280d44/" rel="next" title="CentOS7配置官方Nginx源">
+                <i class="fa fa-chevron-left"></i> CentOS7配置官方Nginx源
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/24289/" rel="prev" title="GitHub Page + hexo 搭建blog">
-                GitHub Page + hexo 搭建blog <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -691,7 +705,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#总结计划"><span class="nav-number">1.</span> <span class="nav-text">总结计划</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-前言"><span class="nav-number">1.</span> <span class="nav-text">0. 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-配置yum源并安装Jenkins"><span class="nav-number">2.</span> <span class="nav-text">1. 配置yum源并安装Jenkins</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-下载yum-repo文件"><span class="nav-number">2.1.</span> <span class="nav-text">0. 下载yum.repo文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-导入公钥"><span class="nav-number">2.2.</span> <span class="nav-text">1. 导入公钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-安装"><span class="nav-number">2.3.</span> <span class="nav-text">2. 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-配置"><span class="nav-number">2.4.</span> <span class="nav-text">3. 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-启动"><span class="nav-number">2.5.</span> <span class="nav-text">4. 启动</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置Jenkins工具、插件"><span class="nav-number">3.</span> <span class="nav-text">2. 配置Jenkins工具、插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-开始使用"><span class="nav-number">4.</span> <span class="nav-text">3. 开始使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-坑"><span class="nav-number">5.</span> <span class="nav-text">4. 坑</span></a></li></ol></div>
             
 
           </div>

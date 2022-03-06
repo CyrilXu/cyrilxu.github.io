@@ -96,17 +96,18 @@
 
 
 
-  <meta name="description" content="0 背景CentOS 7.x 的yum仓库中OpenSSH最高版本是7.4，需要升级版本修补漏洞。 1 准备工作 - 安装telnet1234567yum install telnet-server -ymv /etc/securetty /etc/securetty.baksystemctl enable telnet.socketsystemctl restart telnet.socketf">
+  <meta name="description" content="0 背景智慧办给我们发了个漏扫报告，提及了OpenSSH的漏洞。CentOS 7.x 的yum仓库中OpenSSH最高版本是7.4，需要升级版本修补漏洞。 1 准备工作 - 安装telnet1234567yum install telnet-server -ymv /etc/securetty /etc/securetty.baksystemctl enable telnet.socketsyst">
+<meta name="keywords" content="安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS 7 升级OpenSSH">
 <meta property="og:url" content="http://yoursite.com/posts/c5148ef8/index.html">
 <meta property="og:site_name" content="Cyril&#39;s Blog">
-<meta property="og:description" content="0 背景CentOS 7.x 的yum仓库中OpenSSH最高版本是7.4，需要升级版本修补漏洞。 1 准备工作 - 安装telnet1234567yum install telnet-server -ymv /etc/securetty /etc/securetty.baksystemctl enable telnet.socketsystemctl restart telnet.socketf">
+<meta property="og:description" content="0 背景智慧办给我们发了个漏扫报告，提及了OpenSSH的漏洞。CentOS 7.x 的yum仓库中OpenSSH最高版本是7.4，需要升级版本修补漏洞。 1 准备工作 - 安装telnet1234567yum install telnet-server -ymv /etc/securetty /etc/securetty.baksystemctl enable telnet.socketsyst">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2022-02-07T01:07:32.784Z">
+<meta property="og:updated_time" content="2022-03-03T05:41:13.976Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS 7 升级OpenSSH">
-<meta name="twitter:description" content="0 背景CentOS 7.x 的yum仓库中OpenSSH最高版本是7.4，需要升级版本修补漏洞。 1 准备工作 - 安装telnet1234567yum install telnet-server -ymv /etc/securetty /etc/securetty.baksystemctl enable telnet.socketsystemctl restart telnet.socketf">
+<meta name="twitter:description" content="0 背景智慧办给我们发了个漏扫报告，提及了OpenSSH的漏洞。CentOS 7.x 的yum仓库中OpenSSH最高版本是7.4，需要升级版本修补漏洞。 1 准备工作 - 安装telnet1234567yum install telnet-server -ymv /etc/securetty /etc/securetty.baksystemctl enable telnet.socketsyst">
 
 
 
@@ -379,6 +380,24 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/安全/" itemprop="url" rel="index"><span itemprop="name">安全</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -407,7 +426,7 @@
       
 
       
-        <h1 id="0-背景"><a href="#0-背景" class="headerlink" title="0 背景"></a>0 背景</h1><p>CentOS 7.x 的yum仓库中OpenSSH最高版本是7.4，需要升级版本修补漏洞。</p>
+        <h1 id="0-背景"><a href="#0-背景" class="headerlink" title="0 背景"></a>0 背景</h1><p>智慧办给我们发了个漏扫报告，提及了OpenSSH的漏洞。CentOS 7.x 的yum仓库中OpenSSH最高版本是7.4，需要升级版本修补漏洞。</p>
 <h1 id="1-准备工作-安装telnet"><a href="#1-准备工作-安装telnet" class="headerlink" title="1 准备工作 - 安装telnet"></a>1 准备工作 - 安装telnet</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">yum install telnet-server -y</span><br><span class="line">mv /etc/securetty /etc/securetty.bak</span><br><span class="line">systemctl <span class="built_in">enable</span> telnet.socket</span><br><span class="line">systemctl restart telnet.socket</span><br><span class="line">firewall-cmd --add-port=23/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">netstat -ntlp</span><br></pre></td></tr></table></figure>
 
 <h1 id="2-编译打包成rpm"><a href="#2-编译打包成rpm" class="headerlink" title="2 编译打包成rpm"></a>2 编译打包成rpm</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">OPENSSH_VERSION=8.8p1</span><br><span class="line"></span><br><span class="line">yum -y install  vim  wget epel-release</span><br><span class="line">yum -y install  rpm-build  gcc make</span><br><span class="line">yum -y install  openssl  openssl-devel krb5-devel pam-devel libX11-devel xmkmf libXt-devel</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /root</span><br><span class="line">wget http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-<span class="variable">$&#123;OPENSSH_VERSION&#125;</span>.tar.gz</span><br><span class="line">sha1sum openssh-8.8p1.tar.gz</span><br><span class="line">sha256sum openssh-8.8p1.tar.gz | cut -f1 -d <span class="string">' '</span> | xxd -r -p | base64</span><br><span class="line"></span><br><span class="line">tar -zxf  openssh-<span class="variable">$&#123;OPENSSH_VERSION&#125;</span>.tar.gz</span><br><span class="line">mkdir -p /root/rpmbuild/&#123;SOURCES,SPECS&#125;</span><br><span class="line"></span><br><span class="line">cp ./openssh-<span class="variable">$&#123;OPENSSH_VERSION&#125;</span>/contrib/redhat/openssh.spec /root/rpmbuild/SPECS/</span><br><span class="line">cp openssh-<span class="variable">$&#123;OPENSSH_VERSION&#125;</span>.tar.gz /root/rpmbuild/SOURCES/</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /root/rpmbuild/SPECS/</span><br><span class="line">sed -i -e <span class="string">"s/%global no_gnome_askpass 0/%define no_gnome_askpass 1/g"</span> openssh.spec</span><br><span class="line">sed -i -e <span class="string">"s/%global no_x11_askpass 0/%define no_x11_askpass 1/g"</span> openssh.spec</span><br><span class="line">sed -i -e <span class="string">"s/BuildPreReq/BuildRequires/g"</span> openssh.spec</span><br><span class="line">sed -i -e  <span class="string">"s/BuildRequires: openssl-devel &lt; 1.1/#BuildRequires: openssl-devel &lt; 1.1/g"</span> openssh.spec</span><br><span class="line"></span><br><span class="line">rpmbuild -bb openssh.spec</span><br><span class="line">ls -l /root/rpmbuild/RPMS/x86_64</span><br></pre></td></tr></table></figure>
@@ -440,6 +459,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/安全/" rel="tag"># 安全</a>
+          
+        </div>
       
 
       
@@ -533,7 +558,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -564,7 +589,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -623,7 +650,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">21</span>
+                      
+                    
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

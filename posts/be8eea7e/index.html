@@ -96,18 +96,17 @@
 
 
 
-  <meta name="description" content="把主页配置文件_config.yml 里的post_asset_folder:这个选项设置为true  在你的hexo目录下执行这样一句话npm install hexo-asset-image --save，这是下载安装一个可以上传本地图片的插件，来自dalao：dalao的git  运行hexo n &amp;quot;xxxx&amp;quot;来生成md时，/source/_posts文件夹内除了xxx">
-<meta name="keywords" content="hexo,hexo-asset-image">
+  <meta name="description" content="0 为什么要自己编译Nginx在CentOS下，可以自己配置Nginx的yum源，这样安装简单，以后升级也更方便。唯一美中不足的是不能修改返回参数Server: nginx。因此，为了安全起见，需要自己修改源代码后编译Nginx。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo中使用hexo-asset-image添加本地图片">
-<meta property="og:url" content="http://yoursite.com/posts/73a817fb/index.html">
+<meta property="og:title" content="CentOS编译Nginx">
+<meta property="og:url" content="http://yoursite.com/posts/be8eea7e/index.html">
 <meta property="og:site_name" content="Cyril&#39;s Blog">
-<meta property="og:description" content="把主页配置文件_config.yml 里的post_asset_folder:这个选项设置为true  在你的hexo目录下执行这样一句话npm install hexo-asset-image --save，这是下载安装一个可以上传本地图片的插件，来自dalao：dalao的git  运行hexo n &amp;quot;xxxx&amp;quot;来生成md时，/source/_posts文件夹内除了xxx">
+<meta property="og:description" content="0 为什么要自己编译Nginx在CentOS下，可以自己配置Nginx的yum源，这样安装简单，以后升级也更方便。唯一美中不足的是不能修改返回参数Server: nginx。因此，为了安全起见，需要自己修改源代码后编译Nginx。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-18T15:28:18.241Z">
+<meta property="og:updated_time" content="2022-10-06T14:16:21.931Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo中使用hexo-asset-image添加本地图片">
-<meta name="twitter:description" content="把主页配置文件_config.yml 里的post_asset_folder:这个选项设置为true  在你的hexo目录下执行这样一句话npm install hexo-asset-image --save，这是下载安装一个可以上传本地图片的插件，来自dalao：dalao的git  运行hexo n &amp;quot;xxxx&amp;quot;来生成md时，/source/_posts文件夹内除了xxx">
+<meta name="twitter:title" content="CentOS编译Nginx">
+<meta name="twitter:description" content="0 为什么要自己编译Nginx在CentOS下，可以自己配置Nginx的yum源，这样安装简单，以后升级也更方便。唯一美中不足的是不能修改返回参数Server: nginx。因此，为了安全起见，需要自己修改源代码后编译Nginx。">
 
 
 
@@ -117,7 +116,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/posts/73a817fb/">
+  <link rel="canonical" href="http://yoursite.com/posts/be8eea7e/">
 
 
 
@@ -127,7 +126,7 @@
   };
 </script>
 
-  <title>Hexo中使用hexo-asset-image添加本地图片 | Cyril's Blog</title>
+  <title>CentOS编译Nginx | Cyril's Blog</title>
   
 
 
@@ -330,7 +329,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/73a817fb/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/be8eea7e/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Cyril Xu">
@@ -347,7 +346,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hexo中使用hexo-asset-image添加本地图片
+          <h1 class="post-title" itemprop="name headline">CentOS编译Nginx
 
               
             
@@ -373,30 +372,12 @@
                 
               
 
-              <time title="创建时间：2019-04-23 09:49:15" itemprop="dateCreated datePublished" datetime="2019-04-23T09:49:15+08:00">2019-04-23</time>
+              <time title="创建时间：2022-10-05 21:55:19" itemprop="dateCreated datePublished" datetime="2022-10-05T21:55:19+08:00">2022-10-05</time>
             
 
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/blog/" itemprop="url" rel="index"><span itemprop="name">blog</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -426,22 +407,23 @@
       
 
       
-        <ol>
-<li><p>把主页配置文件<code>_config.yml</code> 里的<code>post_asset_folder:</code>这个选项设置为<code>true</code></p>
-</li>
-<li><p>在你的hexo目录下执行这样一句话<code>npm install hexo-asset-image --save</code>，这是下载安装一个可以上传本地图片的插件，来自dalao：<a href="https://github.com/CodeFalling/hexo-asset-image" target="_blank" rel="noopener">dalao的git</a></p>
-</li>
-<li><p>运行<code>hexo n &quot;xxxx&quot;</code>来生成md时，<code>/source/_posts</code>文件夹内除了<code>xxxx.md</code>文件还有一个同名的文件夹</p>
-</li>
-<li><p>最后在<code>xxxx.md</code>中想引入图片时，先把图片复制到xxxx这个文件夹中，然后只需要在xxxx.md中按照markdown的格式引入图片：</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![你想输入的替代文字](xxxx/图片名.jpg)</span><br></pre></td></tr></table></figure>
+        <h1 id="0-为什么要自己编译Nginx"><a href="#0-为什么要自己编译Nginx" class="headerlink" title="0 为什么要自己编译Nginx"></a>0 为什么要自己编译Nginx</h1><p>在CentOS下，可以自己配置Nginx的yum源，这样安装简单，以后升级也更方便。唯一美中不足的是不能修改返回参数Server: nginx。因此，为了安全起见，需要自己修改源代码后编译Nginx。</p>
+<a id="more"></a>
 
-<p><strong>注意： 网上大多数的教程都是这样引用图片，但是现在的hexo-asset-image 1.0.0版本，只需要输入图片名，不需要xxxx文件夹名。我依然建议像这样引用相对路径。这样在typora中会显示图片，而对于使用了abbrlink的blog也没有任何影响</strong></p>
-<ol start="5">
-<li>最后检查一下，<code>hexo g</code>生成页面后，进入<code>public\2017\02\26\index.html</code>文件中查看相关字段，可以发现，html标签内的语句是<code>&lt;img src=&quot;2017/02/26/xxxx/图片名.jpg&quot;&gt;</code>，而不是<code>&lt;img src=&quot;xxxx/图片名.jpg&gt;</code>。这很重要，关乎你的网页是否可以真正加载你想插入的图片。</li>
-</ol>
+<h1 id="1-下载源代码"><a href="#1-下载源代码" class="headerlink" title="1 下载源代码"></a>1 下载源代码</h1><p>在官网<a href="https://nginx.org/en/download.html下载最新稳定版本" target="_blank" rel="noopener">https://nginx.org/en/download.html下载最新稳定版本</a></p>
+<p>解压后，修改源代码，防止信息泄露</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SERVER_MASK=StringYouWantToShow</span><br><span class="line"></span><br><span class="line">sed -i <span class="string">"s|\"nginx/\"|\"<span class="variable">$&#123;SERVER_MASK&#125;</span>/\"|g"</span> src/core/nginx.h</span><br><span class="line">sed -i -e <span class="string">"s|Server: nginx|Server: <span class="variable">$&#123;SERVER_MASK&#125;</span>|g"</span> src/http/ngx_http_header_filter_module.c</span><br><span class="line">sed -i <span class="string">"s|&lt;center&gt;nginx&lt;/center&gt;|&lt;center&gt;<span class="variable">$&#123;SERVER_MASK&#125;</span>&lt;/center&gt;|g"</span> src/http/ngx_http_special_response.c</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-编译"><a href="#2-编译" class="headerlink" title="2 编译"></a>2 编译</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum -y install make zlib zlib-devel gcc gcc-c++ libtool openssl openssl-devel</span><br><span class="line">./configure --prefix=/usr/<span class="built_in">local</span>/nginx --with-http_ssl_module --with-pcre --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-pcre-jit</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-添加系统服务"><a href="#3-添加系统服务" class="headerlink" title="3 添加系统服务"></a>3 添加系统服务</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># chkconfig: - 85 15</span></span><br><span class="line"><span class="comment"># description: Nginx is a World Wide Web server.</span></span><br><span class="line"><span class="comment"># processname: nginx</span></span><br><span class="line"></span><br><span class="line">nginx=/usr/<span class="built_in">local</span>/nginx/sbin/nginx</span><br><span class="line">conf=/usr/<span class="built_in">local</span>/nginx/conf/nginx.conf</span><br><span class="line"><span class="keyword">case</span> <span class="variable">$1</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line"><span class="built_in">echo</span> -n <span class="string">"Starting Nginx"</span></span><br><span class="line"><span class="variable">$nginx</span> -c <span class="variable">$conf</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">" done"</span></span><br><span class="line">;;</span><br><span class="line">stop)</span><br><span class="line"><span class="built_in">echo</span> -n <span class="string">"Stopping Nginx"</span></span><br><span class="line">killall -9 nginx</span><br><span class="line"><span class="built_in">echo</span> <span class="string">" done"</span></span><br><span class="line">;;</span><br><span class="line"><span class="built_in">test</span>)</span><br><span class="line"><span class="variable">$nginx</span> -t -c <span class="variable">$conf</span></span><br><span class="line">;;</span><br><span class="line">reload)</span><br><span class="line"><span class="built_in">echo</span> -n <span class="string">"Reloading Nginx"</span></span><br><span class="line">ps auxww | grep nginx | grep master | awk <span class="string">'&#123;print $2&#125;'</span> | xargs <span class="built_in">kill</span> -HUP</span><br><span class="line"><span class="built_in">echo</span> <span class="string">" done"</span></span><br><span class="line">;;</span><br><span class="line">restart)</span><br><span class="line"><span class="variable">$0</span> stop</span><br><span class="line"><span class="variable">$0</span> start</span><br><span class="line">;;</span><br><span class="line">show)</span><br><span class="line">ps -aux|grep nginx</span><br><span class="line">;;</span><br><span class="line">*)</span><br><span class="line"><span class="built_in">echo</span> -n <span class="string">"Usage: <span class="variable">$0</span> &#123;start|restart|reload|stop|test|show&#125;"</span></span><br><span class="line">;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+
+<p>设置执行权限：<code>chmod +x /etc/init.d/nginx</code></p>
+<p>注册成服务：<code>chkconfig --add nginx</code></p>
+<p>设置开机启动：<code>chkconfig nginx on</code></p>
+<h1 id="附-隐藏版本号"><a href="#附-隐藏版本号" class="headerlink" title="附: 隐藏版本号"></a>附: 隐藏版本号</h1><p>在<code>nginx.conf</code>里添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    ...</span><br><span class="line">    server_tokens off;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -463,14 +445,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/hexo/" rel="tag"># hexo</a>
-          
-            <a href="/tags/hexo-asset-image/" rel="tag"># hexo-asset-image</a>
-          
-        </div>
-      
 
       
       
@@ -480,8 +454,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/45538/" rel="next" title="linode搭建VPN">
-                <i class="fa fa-chevron-left"></i> linode搭建VPN
+              <a href="/posts/fbe463ed/" rel="next" title="安装Jenkins实现自动化部署">
+                <i class="fa fa-chevron-left"></i> 安装Jenkins实现自动化部署
               </a>
             
           </div>
@@ -489,10 +463,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/48327/" rel="prev" title="微信获取用户信息">
-                微信获取用户信息 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -536,8 +506,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -682,6 +661,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-为什么要自己编译Nginx"><span class="nav-number">1.</span> <span class="nav-text">0 为什么要自己编译Nginx</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-下载源代码"><span class="nav-number">2.</span> <span class="nav-text">1 下载源代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-编译"><span class="nav-number">3.</span> <span class="nav-text">2 编译</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-添加系统服务"><span class="nav-number">4.</span> <span class="nav-text">3 添加系统服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附-隐藏版本号"><span class="nav-number">5.</span> <span class="nav-text">附: 隐藏版本号</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       

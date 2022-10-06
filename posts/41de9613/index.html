@@ -96,13 +96,17 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Cyril&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/archives/2022/03/index.html">
+  <meta name="description" content="0 前言服务器放在公网上，服务使用默认端口很容易被攻击，因此需要修改默认端口">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS修改默认ssh端口">
+<meta property="og:url" content="http://yoursite.com/posts/41de9613/index.html">
 <meta property="og:site_name" content="Cyril&#39;s Blog">
+<meta property="og:description" content="0 前言服务器放在公网上，服务使用默认端口很容易被攻击，因此需要修改默认端口">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-10-05T10:19:00.389Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cyril&#39;s Blog">
+<meta name="twitter:title" content="CentOS修改默认ssh端口">
+<meta name="twitter:description" content="0 前言服务器放在公网上，服务使用默认端口很容易被攻击，因此需要修改默认端口">
 
 
 
@@ -112,7 +116,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/archives/2022/03/">
+  <link rel="canonical" href="http://yoursite.com/posts/41de9613/">
 
 
 
@@ -122,7 +126,7 @@
   };
 </script>
 
-  <title>归档 | Cyril's Blog</title>
+  <title>CentOS修改默认ssh端口 | Cyril's Blog</title>
   
 
 
@@ -170,7 +174,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -263,7 +267,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
 
     
     
@@ -305,101 +309,197 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      
-      <span class="archive-page-counter">
-        
-        
-        
-          
-        
-        嗯..! 目前共计 19 篇日志。 继续努力。
-      </span>
-      
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2022">2022</h1>
-          </div>
-        
-        
-
-        
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/41de9613/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Cyril Xu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyril's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-          <a class="post-title-link" href="/posts/fbe463ed/" itemprop="url">
-            
-              <span itemprop="name">安装Jenkins实现自动化部署</span>
-            
-          </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">CentOS修改默认ssh端口
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2022-03-03T13:36:45+08:00" content="2022-03-03">
-          03-03
-        </time>
-      </div>
+              
+            
+          </h1>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
+          <span class="post-time">
 
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-02-15 16:57:49" itemprop="dateCreated datePublished" datetime="2022-02-15T16:57:49+08:00">2022-02-15</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
+      
+        <h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0 前言"></a>0 前言</h1><p>服务器放在公网上，服务使用默认端口很容易被攻击，因此需要修改默认端口</p>
+<a id="more"></a>
+
+<h1 id="1-查看SELinux配置"><a href="#1-查看SELinux配置" class="headerlink" title="1 查看SELinux配置"></a>1 查看SELinux配置</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sestatus</span><br></pre></td></tr></table></figure>
+
+<p>需要disabled</p>
+<h1 id="2-修改sshd配置"><a href="#2-修改sshd配置" class="headerlink" title="2 修改sshd配置"></a>2 修改sshd配置</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+
+<p>#Port 22 去掉#，先保留22端口，防止新端口登录不上去。</p>
+<p>添加新端口号，如12345，保存退出</p>
+<h1 id="3-修改防火墙"><a href="#3-修改防火墙" class="headerlink" title="3 修改防火墙"></a>3 修改防火墙</h1><ol>
+<li><p>添加规则</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --permanent --zone=public --add-port=12345/tcp</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CentOS 7出现<code>FirewallD is not running</code>，原来的iptables被firewalld取代。也可以不启用。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl unmask firewalld</span><br><span class="line">systemctl start firewalld</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>检查</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --permanent --query-port=12345/tcp</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果是云服务器，则需要在网页上放行端口</p>
+</li>
+</ol>
+<h1 id="4-重启SSH"><a href="#4-重启SSH" class="headerlink" title="4 重启SSH"></a>4 重启SSH</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart sshd.service</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-验证"><a href="#5-验证" class="headerlink" title="5 验证"></a>5 验证</h1><p>使用新的端口连接，如果成功，删除22端口，重启ssh服务</p>
+
+      
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/c9280d44/" rel="next" title="CentOS7配置官方Nginx源">
+                <i class="fa fa-chevron-left"></i> CentOS7配置官方Nginx源
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/9d608eb2/" rel="prev" title="CentOS安装Java">
+                CentOS安装Java <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -419,8 +519,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -566,6 +675,23 @@
       </div>
 
       
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-前言"><span class="nav-number">1.</span> <span class="nav-text">0 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-查看SELinux配置"><span class="nav-number">2.</span> <span class="nav-text">1 查看SELinux配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-修改sshd配置"><span class="nav-number">3.</span> <span class="nav-text">2 修改sshd配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-修改防火墙"><span class="nav-number">4.</span> <span class="nav-text">3 修改防火墙</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-重启SSH"><span class="nav-number">5.</span> <span class="nav-text">4 重启SSH</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-验证"><span class="nav-number">6.</span> <span class="nav-text">5 验证</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
 
       
 
@@ -695,6 +821,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
 
   
 
@@ -710,6 +840,8 @@
 
   
 
+
+  
 
 
   

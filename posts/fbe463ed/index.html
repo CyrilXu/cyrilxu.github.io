@@ -97,13 +97,14 @@
 
 
   <meta name="description" content="0. 前言和同事做网站，我负责后端代码开发。每次写完代码，都要打包上传到服务器，手动执行脚本，太累。我一直跟我的小兄弟们说，如果一件事情要做3遍以上，你就需要考虑自动化。今天弄个Jenkins做自动化部署，从繁重的手动操作中解放出来。">
+<meta name="keywords" content="CentOS,Jenkins">
 <meta property="og:type" content="article">
 <meta property="og:title" content="安装Jenkins实现自动化部署">
 <meta property="og:url" content="http://yoursite.com/posts/fbe463ed/index.html">
 <meta property="og:site_name" content="Cyril&#39;s Blog">
 <meta property="og:description" content="0. 前言和同事做网站，我负责后端代码开发。每次写完代码，都要打包上传到服务器，手动执行脚本，太累。我一直跟我的小兄弟们说，如果一件事情要做3遍以上，你就需要考虑自动化。今天弄个Jenkins做自动化部署，从繁重的手动操作中解放出来。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2022-03-06T19:26:30.266Z">
+<meta property="og:updated_time" content="2022-10-08T05:50:23.829Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="安装Jenkins实现自动化部署">
 <meta name="twitter:description" content="0. 前言和同事做网站，我负责后端代码开发。每次写完代码，都要打包上传到服务器，手动执行脚本，太累。我一直跟我的小兄弟们说，如果一件事情要做3遍以上，你就需要考虑自动化。今天弄个Jenkins做自动化部署，从繁重的手动操作中解放出来。">
@@ -379,6 +380,31 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Jenkins/" itemprop="url" rel="index"><span itemprop="name">Jenkins</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Jenkins/CentOS/" itemprop="url" rel="index"><span itemprop="name">CentOS</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -426,6 +452,7 @@
 <p><strong>注意</strong>：这里启动可能失败。我遇到的问题是配置文件里的修改没起作用。我把应用的8080改成其他端口了，并且建了一个软连接：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /xxx/xxx/java /usr/bin/java</span><br></pre></td></tr></table></figure>
 
+<p><strong>update</strong>：我第二次安装的时候仍然启动失败，报找不到java的错误。google了一圈，发现Jenkins用systemctl启动时读取的是<code>/usr/lib/systemd/system/jenkins.service</code>。删掉这个文件，在<code>/etc/init.d/jenkins</code>配置好java路径，启动成功</p>
 <h1 id="2-配置Jenkins工具、插件"><a href="#2-配置Jenkins工具、插件" class="headerlink" title="2. 配置Jenkins工具、插件"></a>2. 配置Jenkins工具、插件</h1><p>在浏览器打开Jenkins，需要输入<code>/var/lib/jenkins/secrets/initialAdminPassword</code>文件中的安全码，设置好用户名及插件</p>
 <p>在体统管理-&gt;全局工具配置中，根据实际目录配置java、maven、git等信息。</p>
 <p>因为要在构建成功后启动spring boot程序，还要安装<code>build post task</code>插件。</p>
@@ -478,6 +505,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/CentOS/" rel="tag"># CentOS</a>
+          
+            <a href="/tags/Jenkins/" rel="tag"># Jenkins</a>
+          
+        </div>
+      
 
       
       
@@ -487,8 +522,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/9d608eb2/" rel="next" title="CentOS安装Java">
-                <i class="fa fa-chevron-left"></i> CentOS安装Java
+              <a href="/posts/3675cb27/" rel="next" title="CentOS安装Redis">
+                <i class="fa fa-chevron-left"></i> CentOS安装Redis
               </a>
             
           </div>
@@ -570,7 +605,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -603,7 +638,37 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -664,7 +729,19 @@
                     
                       
                     
-                    <span class="site-state-item-count">22</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
